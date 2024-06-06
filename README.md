@@ -1,8 +1,10 @@
 # Hi there 🌸
 
 This is the repository of girlysheet.cloud website ! I made it public so you can observe how I manage to deploy my infrastructure.
-Wait ..
-The website is ot online yet ! But below you will find the architecture of this project. Until the deployment to production, it might be updated /!\.
+
+But wait ..
+
+The website is ot online yet ! But below you will find the architecture of this project. Until the deployment to production, it might be updated.
 
 ## Architecture 🌼
 
