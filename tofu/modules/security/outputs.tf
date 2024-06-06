@@ -5,25 +5,6 @@
 # These variables can be reused in other configuration files.
 # ===================================
 
-# ✿ Output the VPC ID
-output "vpc_id" {
-  value       = module.vpc.vpc_id
-  description = "The ID of the VPC created."
-}
-
-# ✿ Output the subnet IDs
-output "public_subnet_ids" {
-  value       = module.vpc.public_subnet_ids
-  description = "List of IDs of public subnets created."
-}
-
-# ✿ Output the VM ID
-output "public_instance_ip" {
-  value       = module.ec2.instance_public_ips
-  description = "Public IP address of the public EC2 instances."
-}
-
-
 # ✿ Output the Security Group ID
 output "security_group_id" {
   value       = aws_security_group.girlysheet_front_sg[*].id
