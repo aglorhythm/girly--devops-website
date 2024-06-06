@@ -1,4 +1,4 @@
-# Déploiement de l'infrastructure
+# Infrastructure deployment
 
 ## Run the script to generate configure the bucket
 
