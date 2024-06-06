@@ -1,6 +1,6 @@
 # Infrastructure deployment
 
-## Run the script to generate configure the bucket
+## 🪣 Run the script to generate configure the bucket
 
 The bucket has to be created through the console first !
 
@@ -11,7 +11,7 @@ tofu plan
 tofu apply
 ```
 
-## Run the script to create the resources
+## 🪵✨ Run the script to create the resources
 
 ```bash
 cd tofu/
@@ -20,7 +20,7 @@ tofu plan
 tofu apply
 ```
 
-## Retrieved the key to connect to the instance
+## 🗝️ Retrieved the key to connect to the instance
 
 We get the key from AWS and we store it in our local sever:
 
@@ -34,9 +34,9 @@ We restrict the rights to the retrieved key file:
 chmod 400 "example.pem"
 ```
 
-You need to delete you secret ?
+⭕ You need to delete you secret ?
 
-Mistakes happen ! Just use AWS cli and you'll be set.
+Mistakes happen ! Just use AWS cli and you'll be set. 💅
 
 ```bash
 aws secretsmanager delete-secret \
