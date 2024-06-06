@@ -21,7 +21,7 @@ The website is ot online yet ! But below you will find the architecture of this 
 
 ### DevOps
 
-- Azure
+- **Azure** :
     - **Repos**: Manages source code using Azure Repos, offering secure version control.
     - **Pipelines**: Automates builds and deployments using Azure Pipelines, ensuring smooth and continuous integration and deployment processes.
     - **Container Registry**: Hosts Docker container image of the frontend that is used in deployments, supporting consistent and reproducible builds.
