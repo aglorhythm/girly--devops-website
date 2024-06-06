@@ -38,7 +38,7 @@ resource "aws_internet_gateway" "girlysheet_gw" {
 resource "aws_subnet" "public_subnets" {
   count             = length(var.azs) 
   vpc_id            = aws_vpc.girlysheet_vpc.id
-  cidr_block        = cidrsubnet(var.cidr_block, 8, count.index)
+  cidr_block        = var.cidr_block
   availability_zone = var.azs[count.index] 
   map_public_ip_on_launch = true
   tags = {

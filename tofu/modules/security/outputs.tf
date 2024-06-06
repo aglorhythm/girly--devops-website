@@ -46,3 +46,12 @@ output "all_outbound_rule" {
   }
   description = "Details of the outbound rule allowing all traffic."
 }
+
+# ✿ Key
+output "instance_key" {
+  value       = "${aws_key_pair.gs_front_keypair.key_name}.pem"
+}
+
+output "instance_key_name" {
+  value       = aws_key_pair.gs_front_keypair.key_name
+}
