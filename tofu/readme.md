@@ -20,7 +20,7 @@ tofu plan
 tofu apply
 ```
 
-## 🗝️ Retrieved the key to connect to the instance
+## 🗝️ Retrieve the key to connect to the instance
 
 We get the key from AWS and we store it in our local sever:
 
