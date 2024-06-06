@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://signedmonyka.com
+
+# Sitemaps
+Sitemap: https://signedmonyka.com/fr/sitemap.xml

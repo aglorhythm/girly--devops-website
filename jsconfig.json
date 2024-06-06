@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Sets the base directory relative to which path mappings are resolved
+    "paths": {
+      "@/*": ["app/*"] // Maps all imports starting with '@/' to the 'app/' directory
+    }
+  },
+  "include": [
+    "app/**/*" // Include all files under the 'app' directory for IntelliSense
+  ],
+  "exclude": [
+    "node_modules", // Exclude 'node_modules' directory to speed up IntelliSense
+    "**/node_modules/*"
+  ]
+}

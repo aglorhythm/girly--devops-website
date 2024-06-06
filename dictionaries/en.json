@@ -1,0 +1,174 @@
+{
+    "menu": {
+        "home": "Home",
+        "about": "About",
+        "favorites": "Favorites",
+        "collections": "Collections",
+        "stories": "Stories",
+        "brand": "The Brand",
+        "contact": "Reach out",
+        "shipping": "Shipping",
+        "terms": "Terms",
+        "privacy": "Privacy Policy"
+    },
+    "home": {
+        "metadata": {
+            "alternates": {
+                "canonical": "https://signedmonyka.com/en",
+                "languages": {
+                    "en": "https://signedmonyka.com/en",
+                    "fr": "https://signedmonyka.com/fr"
+                }
+            },
+            "title": "Signed Monyka — Stainless Jewelry & Chic Accessories",
+            "description": "Step into the world of Signed Monyka: where luxury, style, and empowerment intertwine. Discover unique jewelry for bold women ready to shine every day.",
+            "openGraph": {
+                "title": "Signed Monyka — Stainless Jewelry & Chic Accessories",
+                "description": "Step into the world of Signed Monyka: where luxury, style, and empowerment intertwine. Discover unique jewelry for bold women ready to shine every day.",
+                "siteName": "Signed Monyka",
+                "url": "https://signedmonyka.com/en",
+                "images": [
+                    {
+                        "url": "/round-cookie-or.png",
+                        "width": "800",
+                        "height": "800"
+                    }
+                ],
+                "locale": "en",
+                "type": "website"
+            },
+            "robots": {
+                "index": true,
+                "follow": true,
+                "nocache": false,
+                "googleBot": {
+                    "index": true,
+                    "follow": true,
+                    "noimageindex": false, 
+                    "max-video-preview": 0, 
+                    "max-image-preview": "large", 
+                    "max-snippet": -1
+                }
+            },
+            "twitter": {
+                "card": "summary",
+                "site": "@signedmonyka",
+                "title": "Signed Monyka — Unlock Richness for a Lifestyle Beyond Limits",
+                "description": "Luxury starts with you.",
+                "creator": "@signedmonyka",
+                "images": [{ "url": "/round-cookie-or.png", "alt": "A luxury bag chain"}]
+            }
+        }
+    },
+    "collection": {
+        "title": "Our luxury items",
+        "metadata": {
+            "alternates": {
+                "canonical": "https://signedmonyka.com/en/collections",
+                "languages": {
+                    "en": "https://signedmonyka.com/en/collections",
+                    "fr": "https://signedmonyka.com/fr/collections"
+                }
+            },
+            "title": "Stainless Jewelry & Accessories - Monyka Collection",
+            "description": "Explore our collection of vibrant stainless jewelry and chic accessories designed to enhance every moment of your life.",
+            "openGraph": {
+                "title": "Stainless Jewelry & Accessories - Monyka Collection",
+                "description": "Explore our collection of vibrant stainless jewelry and chic accessories designed to enhance every moment of your life.",
+                "siteName": "Signed Monyka",
+                "url": "https://signedmonyka.com/en/collections",
+                "images": [
+                    {
+                        "url": "/round-cookie-or.png",
+                        "width": "800",
+                        "height": "800"
+                    }
+                ],
+                "locale": "en",
+                "type": "website"
+            },
+            "robots": {
+                "index": true,
+                "follow": true,
+                "nocache": false,
+                "googleBot": {
+                    "index": true,
+                    "follow": true,
+                    "noimageindex": false, 
+                    "max-video-preview": 0, 
+                    "max-image-preview": "large", 
+                    "max-snippet": -1
+                }
+            },
+            "twitter": {
+                "card": "summary",
+                "site": "@signedmonyka",
+                "title": "Signed Monyka",
+                "description": "Luxury starts with you.",
+                "creator": "@signedmonyka",
+                "images": [{ "url": "/round-cookie-or.png", "alt": "A luxury bag chain"}]
+            }
+        }
+    },
+    "stories": {
+        "metadata": {
+            "alternates": {
+                "canonical": "https://signedmonyka.com/en/stories",
+                "languages": {
+                    "en": "https://signedmonyka.com/en/stories",
+                    "fr": "https://signedmonyka.com/fr/stories"
+                }
+            },
+            "title": "Monyka's Chronicles: Inspiring Stories for the Empowered Woman",
+            "description": "Dive into Signed Monyka's Chronicles — a blend of inspiring stories and guides for empowered women. Explore narratives of growth, glamour, and practical wisdom.",
+            "openGraph": {
+                "title": "Monyka's Chronicles: Inspiring Stories for the Empowered Woman",
+                "description": "Dive into Signed Monyka's Chronicles — a blend of inspiring stories and guides for empowered women. Explore narratives of growth, glamour, and practical wisdom.",
+                "siteName": "Signed Monyka",
+                "url": "https://signedmonyka.com/en/stories",
+                "images": [
+                    {
+                        "url": "/wah.jpg",
+                        "width": "800",
+                        "height": "800"
+                    }
+                ],
+                "locale": "fr",
+                "type": "website"
+            },
+            "robots": {
+                "index": true,
+                "follow": true,
+                "nocache": false,
+                "googleBot": {
+                    "index": true,
+                    "follow": true,
+                    "noimageindex": false, 
+                    "max-video-preview": 0, 
+                    "max-image-preview": "large", 
+                    "max-snippet": -1
+                }
+            },
+            "twitter": {
+                "card": "summary",
+                "site": "@signedmonyka",
+                "title": "Signed Monyka",
+                "description": "Luxury starts with you.",
+                "creator": "@signedmonyka",
+                "images": [{ "url": "/wah.jpg", "alt": ""}]
+            }
+        }
+    },
+    "buttons": {
+        "readStory" : "Read story",
+        "read": "Read",
+        "shopLuxury": "Shop Luxury",
+        "seeCollection": "See Collection",
+        "stories": "Stories"
+    },
+    "categories": {
+        "bracelets": "Bracelets",
+        "bagChains": "Bag Chains",
+        "merch": "Merch"
+    }
+}
