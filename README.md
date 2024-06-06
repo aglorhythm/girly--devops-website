@@ -8,14 +8,14 @@ The website is ot online yet ! But below you will find the architecture of this 
 
 ### Frontend
 
-- AWS (Amazon Web Services)
+- **AWS** (Amazon Web Services)
     - **EC2 (Elastic Compute Cloud)**: Serves as the dynamic web hosting service, providing scalable compute capacity.
     - **S3 (Simple Storage Service)**: Used for storing infrastructure state.
     - **CloudFront**: Implemented as a CDN (Content Delivery Network), CloudFront speeds up the delivery of content by caching static resources closer to users.
 
 ### Backend
 
-- OVH : Provides hosting for WordPress, enabling easy content management and backend updates without direct modifications to backend code.
+- **OVH** : Provides hosting for WordPress, enabling easy content management and backend updates without direct modifications to backend code.
 
 ### DevOps
 
@@ -26,7 +26,7 @@ The website is ot online yet ! But below you will find the architecture of this 
 
 ### Database
 
-- Azure MySQL : The primary database used by the website, storing all dynamic data and user information securely and efficiently.
+- **Azure MySQL** : The primary database used by the website, storing all dynamic data and user information securely and efficiently.
 
 
 ![Girlysheet Architecture](https://res.cloudinary.com/dhugrtkns/image/upload/v1717665234/girlysheet_architecture_iwox1e.png)
