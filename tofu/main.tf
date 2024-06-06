@@ -114,7 +114,7 @@ resource "ovh_domain_zone_record" "sub_girlysheet" {
 
 # Generate Ansible variables file in the group_vars folder
 resource "local_file" "girlysheet_vars" {
-  filename = "../ansible/group_vars/girlysheet.yml"
+  filename = "../ansible/resources/group_vars/girlysheet.yml"
   content = <<-EOF
     ansible_user: admin
     ansible_ssh_private_key_file:  ./${module.security.instance_key}
@@ -132,5 +132,5 @@ resource "local_file" "hosts" {
   [girlysheet]
   ${module.ec2.instance_girlysheet_ip}
   EOF
-  filename = "../ansible/hosts"
+  filename = "../ansible/resources/hosts"
 }
