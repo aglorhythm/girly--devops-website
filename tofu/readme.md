@@ -1,6 +1,6 @@
 # Infrastructure deployment 🌸
 
-## 🪣 Run the script to generate configure the bucket
+## 🪣 Run the script to configure the bucket
 
 The bucket has to be created through the console first !
 
