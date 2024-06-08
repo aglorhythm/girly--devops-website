@@ -1,0 +1,56 @@
+# ===================================
+# Author: @aglorhythm / girlysheet.cloud ✿
+# Description: This script is retrieved by azure pipelines.
+# The docker image is build and pushed in another azure pipeline. 
+# I cannot add different environments because of budget purpose
+# ===================================
+
+trigger:
+  branches:
+    include:
+    - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+container: ghcr.io/opentofu/opentofu:latest
+
+variables:
+  TF_ROOT: $(Build.SourcesDirectory)/terraform
+  TF_BUCKET: $(Build.SourcesDirectory)/terraform/scripts
+  ANS_ROOT: $(Build.SourcesDirectory)/ansible
+  ANS_INVENTORY: $(Build.SourcesDirectory)/ansible/resources
+  GITHUB_USERNAME: $(GithubUsername)
+  GITHUB_PAT: $(GithubPat)
+stages:
+- stage: Validate
+  jobs:
+  - job: terraform_validate
+    steps:
+    - script: |
+        pwd
+      displayName: 'Validate Deployment'
+
+- stage: Plan
+  jobs:
+  - job: terrafoorm_plan
+    steps:
+    - script: |
+        pwd
+      displayName: 'Plan Terraform Changes'
+
+- stage: Apply
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: terraform_apply
+    steps:
+    - script: |
+        pwd
+      displayName: 'Apply Terraform Changes'
+
+- stage: Configure
+  jobs:
+  - job: ansible_configure
+    steps:
+    - script: |
+        pwd
+      displayName: 'Configure GS Server'
