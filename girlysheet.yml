@@ -10,10 +10,6 @@ trigger:
     include:
     - main
 
-pool:
-  vmImage: 'ubuntu-latest'
-container: ghcr.io/opentofu/opentofu:latest
-
 variables:
   TF_ROOT: $(Build.SourcesDirectory)/terraform
   TF_BUCKET: $(Build.SourcesDirectory)/terraform/scripts
@@ -26,6 +22,9 @@ stages:
 - stage: Validate
   jobs:
   - job: terraform_validate
+    pool:
+        vmImage: 'ubuntu-latest'
+    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
@@ -35,6 +34,9 @@ stages:
 - stage: Plan
   jobs:
   - job: terrafoorm_plan
+    pool:
+        vmImage: 'ubuntu-latest'
+    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
@@ -44,6 +46,9 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   jobs:
   - job: terraform_apply
+    pool:
+        vmImage: 'ubuntu-latest'
+    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
@@ -52,6 +57,9 @@ stages:
 - stage: Configure
   jobs:
   - job: ansible_configure
+    pool:
+        vmImage: 'ubuntu-latest'
+    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
