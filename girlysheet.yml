@@ -21,6 +21,7 @@ variables:
   ANS_INVENTORY: $(Build.SourcesDirectory)/ansible/resources
   GITHUB_USERNAME: $(GithubUsername)
   GITHUB_PAT: $(GithubPat)
+
 stages:
 - stage: Validate
   jobs:
@@ -29,7 +30,7 @@ stages:
     - script: |
         pwd
         tofu -v
-      displayName: 'Validate Deployment'
+    displayName: 'Validate Deployment'
 
 - stage: Plan
   jobs:
@@ -37,7 +38,7 @@ stages:
     steps:
     - script: |
         pwd
-      displayName: 'Plan Terraform Changes'
+    displayName: 'Plan Terraform Changes'
 
 - stage: Apply
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
@@ -46,7 +47,7 @@ stages:
     steps:
     - script: |
         pwd
-      displayName: 'Apply Terraform Changes'
+    displayName: 'Apply Terraform Changes'
 
 - stage: Configure
   jobs:
@@ -54,4 +55,4 @@ stages:
     steps:
     - script: |
         pwd
-      displayName: 'Configure GS Server'
+    displayName: 'Configure GS Server'
