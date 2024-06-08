@@ -28,6 +28,7 @@ stages:
     steps:
     - script: |
         pwd
+        tofu -v
       displayName: 'Validate Deployment'
 
 - stage: Plan
