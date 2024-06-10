@@ -159,7 +159,9 @@ stages:
       env:
         GET_KEY: $(GET_KEY)
         SECURE_KEY: $(SECURE_KEY)
-    displayName: 'Get key for GS Server'
+      displayName: 'Get key for GS Server'
+      continueOnError: false
+
     - publish: $(ANS_ROOT)
       artifact: AnsibleRoot
       displayName: 'Publish Ansible resources with key'
