@@ -7,8 +7,8 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN npm install
+RUN npm install --verbose && npm cache clean --force
 
 EXPOSE 3000
 
-CMD ["npm", "dev"]
+CMD ["npm", "run", "dev"]
