@@ -70,12 +70,12 @@ stages:
         METHOD="GET"
         URL="https://api.ovh.com/1.0/me"
         BODY=""
-        SIGNATURE="\$1$TF_VAR_ovh_application_secret+$TF_VAR_ovh_consumer_key+$METHOD+$URL+$BODY+$TIMESTAMP"
-        HASHED_SIGNATURE=$(echo -n "$SIGNATURE" | openssl dgst -sha1 -hmac "$TF_VAR_ovh_application_secret" | awk '{print $2}')
+        SIGNATURE="\$1$(TF_VAR_ovh_application_secret)+$(TF_VAR_ovh_consumer_key)+$METHOD+$URL+$BODY+$TIMESTAMP"
+        HASHED_SIGNATURE=$(echo -n "$SIGNATURE" | openssl dgst -sha1 -hmac "$(TF_VAR_ovh_application_secret)" | awk '{print $2}')
 
         RESPONSE=$(curl -X GET \
-        -H "X-Ovh-Application: $TF_VAR_ovh_application_key" \
-        -H "X-Ovh-Consumer: $TF_VAR_ovh_consumer_key" \
+        -H "X-Ovh-Application: $(TF_VAR_ovh_application_key)" \
+        -H "X-Ovh-Consumer: $(TF_VAR_ovh_consumer_key)" \
         -H "X-Ovh-Signature: \$1$HASHED_SIGNATURE" \
         -H "X-Ovh-Timestamp: $TIMESTAMP" \
         "https://api.ovh.com/1.0/me")
