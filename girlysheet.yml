@@ -156,7 +156,6 @@ stages:
         cd $(ANS_ROOT)
         ls
         aws secretsmanager get-secret-value --secret-id girlysheet_front_privkey --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
-        chmod 400 $(KEY_NAME)
         echo "Retrieved key:" 
         ls
       env:
