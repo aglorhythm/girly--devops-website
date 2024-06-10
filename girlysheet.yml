@@ -24,7 +24,6 @@ stages:
   - job: terraform_validate
     pool:
         name: Default
-    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
@@ -36,7 +35,6 @@ stages:
   - job: terrafoorm_plan
     pool:
         name: Default
-    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
@@ -48,7 +46,6 @@ stages:
   - job: terraform_apply
     pool:
         name: Default
-    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
@@ -59,7 +56,6 @@ stages:
   - job: ansible_configure
     pool:
         name: Default
-    container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
         pwd
