@@ -47,12 +47,18 @@ stages:
     steps:
     - checkout: self
     - script: |
+        aws s3 ls s3://tfstate-front-girlysheet --profile girly
+        aws s3api head-bucket --bucket tfstate-front-girlysheet
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
         tofu plan -refresh=true -out=tfplan_bucket -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
         ls -lah
+      env:
+        AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+        AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
       displayName: 'Plan Tofu changes - Bucket'
       continueOnError: false
 
