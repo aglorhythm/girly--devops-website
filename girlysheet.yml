@@ -11,50 +11,100 @@ trigger:
     - main
 
 variables:
-  TF_ROOT: $(Build.SourcesDirectory)/terraform
-  TF_BUCKET: $(Build.SourcesDirectory)/terraform/scripts
+  TF_ROOT: $(Build.SourcesDirectory)/tofu
+  TF_BUCKET: $(Build.SourcesDirectory)/tofu/scripts
   ANS_ROOT: $(Build.SourcesDirectory)/ansible
   ANS_INVENTORY: $(Build.SourcesDirectory)/ansible/resources
 
 stages:
 - stage: Validate
   jobs:
-  - job: terraform_validate
+  - job: tofu_validate
     pool:
         name: Default
     steps:
     - checkout: self
     - script: |
-        pwd
-        ls
         cd $(TF_BUCKET)
+        echo "Changed directory:" 
         pwd
-        ls
-    displayName: 'Validate Deployment'
+        tofu init -input=false
+        tofu validate
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false
+        tofu validate
+    displayName: 'Validate Tofu deployment'
 
 - stage: Plan
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
-  - job: terraform_plan
+  - job: tofu_plan
     pool:
         name: Default
     steps:
     - checkout: self
     - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
         pwd
-    displayName: 'Plan Terraform Changes'
+        tofu init -input=false -reconfigure
+        tofu plan -refresh=true -out=tfplan_bucket -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
+        ls -lah
+    - script: |
+        cd $(TF_ROOT)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false -reconfigure
+        tofu plan -refresh=true -out=tfplan_root -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
+        ls -lah
+    displayName: 'Plan Tofu changes'
+    - publish: $(TF_BUCKET)/scripts/tfplan_bucket
+      artifact: TofuPlanBucket
+      displayName: 'Publish Tofu plan for the s3 bucket'
+    - publish: $(TF_ROOT)/tfplan_root
+      artifact: TofuPlanRoot
+      displayName: 'Publish Tofu plan for the root script'
 
 - stage: Apply
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
-  - job: terraform_apply
+  - job: tofu_apply
     pool:
         name: Default
     steps:
     - checkout: self
+    - download: current
+      artifact: TofuPlanBucket
+      displayName: 'Download Tofu plan for the s3 bucket'
+    - download: current
+      artifact: TofuPlanRoot
+      displayName: 'Download Tofu plan for the root script'
     - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
         pwd
-    displayName: 'Apply Terraform Changes'
+        tofu init -input=false -reconfigure
+        tofu apply tfplan_bucket
+    - script: |
+        cd $(TF_ROOT)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false -reconfigure
+        tofu apply tfplan_root
+    - script: |
+        echo "New host file:" 
+        ls $(Build.SourcesDirectory)/ansible
+        cat $(Build.SourcesDirectory)/ansible/hosts
+        echo "New group vars file:" 
+        ls $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars
+        cat $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars/*.yml
+    displayName: 'Apply Tofu Changes'
+    - publish: $(Build.SourcesDirectory)/ansible
+      artifact: AnsibleResources
+      displayName: 'Publish Ansible resources'
 
 - stage: Configure
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
