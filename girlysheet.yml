@@ -21,7 +21,7 @@ variables:
     value: $(Build.SourcesDirectory)/ansible
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
-    
+
 - stage: Validate
   jobs:
   - job: tofu_validate
@@ -41,8 +41,8 @@ variables:
         pwd
         tofu init -input=false
         tofu validate
-    displayName: 'Validate Tofu deployment'
-    continueOnError: false
+      displayName: 'Validate Tofu deployment'
+      continueOnError: false
 
 - stage: Plan
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
