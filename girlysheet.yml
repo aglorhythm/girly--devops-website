@@ -68,28 +68,6 @@ stages:
         echo "Using OVH Application Key: ${TF_VAR_ovh_application_key:0:4}****"
         echo "Using OVH Application Secret: ${TF_VAR_ovh_application_secret:0:4}****"
         echo "Using OVH Consumer Key: ${TF_VAR_ovh_consumer_key:0:4}****"
-        echo "Testing OVH API keys"
-              
-        # Fetch the current timestamp from OVH API
-        TIMESTAMP=$(curl -s https://api.ovh.com/1.0/auth/time)
-        METHOD="GET"
-        URL="https://api.ovh.com/1.0/me"
-        BODY=""
-        SECRET=$TF_VAR_ovh_application_secret
-        CONSUMER=$TF_VAR_ovh_consumer_key
-        APP=$TF_VAR_ovh_application_key
-        SIGNATURE="\$1$SECRET+$CONSUMER+$METHOD+$URL+$BODY+$TIMESTAMP"
-        HASHED_SIGNATURE=$(echo -n "$SIGNATURE" | openssl dgst -sha1 -hmac "$SECRET" | awk '{print $2}')
-
-        RESPONSE=$(curl -X GET \
-        -H "X-Ovh-Application: $APP" \
-        -H "X-Ovh-Consumer: $CONSUMER" \
-        -H "X-Ovh-Signature: \$1$HASHED_SIGNATURE" \
-        -H "X-Ovh-Timestamp: $TIMESTAMP" \
-        "$URL")
-
-        echo "Response: $RESPONSE"
-        echo "Key: $APP"
         tofu init -input=false -reconfigure
         TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
         ls -lah
