@@ -149,7 +149,14 @@
       ansible.builtin.service:
         name: nginx
         state: started
-  
+    
+    - name: Get SSL certificate using Certbot
+      ansible.builtin.command: >
+        certbot --nginx -d {{ instance_dns_zone }} --non-interactive --agree-tos --email {{ certbot_email }}
+      args:
+        creates: /etc/letsencrypt/live/{{ instance_dns_zone }}/fullchain.pem
+      notify:
+        - reload nginx
       
   handlers:
   - name: reload nginx
