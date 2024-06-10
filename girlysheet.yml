@@ -47,8 +47,12 @@ stages:
     steps:
     - checkout: self
     - script: |
-        aws s3 ls s3://tfstate-front-girlysheet --profile girly
+        aws configure set aws_access_key_id $(AWS_ACCESS_KEY_ID)
+        aws configure set aws_secret_access_key $(AWS_SECRET_ACCESS_KEY)
+        aws configure set region $(AWS_DEFAULT_REGION)
+        aws s3 ls s3://tfstate-front-girlysheet
         aws s3api head-bucket --bucket tfstate-front-girlysheet
+        echo "Current AWS Region: $(AWS_DEFAULT_REGION)"
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
