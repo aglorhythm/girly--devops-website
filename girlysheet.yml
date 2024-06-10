@@ -65,9 +65,9 @@ stages:
         cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
-        echo "Using OVH Application Key: $APP"
-        echo "Using OVH Application Secret: ${SECRET:0:4}****"
-        echo "Using OVH Consumer Key: ${CONSUMER:0:4}****"
+        echo "Using OVH Application Key: ${TF_VAR_ovh_application_key:0:4}****"
+        echo "Using OVH Application Secret: ${TF_VAR_ovh_application_secret:0:4}****"
+        echo "Using OVH Consumer Key: ${TF_VAR_ovh_consumer_key:0:4}****"
         echo "Testing OVH API keys"
               
         # Fetch the current timestamp from OVH API
