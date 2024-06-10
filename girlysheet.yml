@@ -42,6 +42,7 @@ variables:
         tofu validate
     displayName: 'Validate Tofu deployment'
     continueOnError: false
+    
 - stage: Validate
   jobs:
   - job: tofu_validate
