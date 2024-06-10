@@ -56,7 +56,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu plan -refresh=true -out=tfplan_bucket"
+        tofu plan -refresh=true -out=tfplan_bucket
         ls -lah
       displayName: 'Plan Tofu changes - Bucket'
       continueOnError: false
@@ -66,7 +66,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu plan -refresh=true -out=tfplan_root"
+        tofu plan -refresh=true -out=tfplan_root
         ls -lah
       displayName: 'Plan Tofu changes - Root'
       continueOnError: false
