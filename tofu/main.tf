@@ -101,7 +101,7 @@ module "ec2" {
 # ✿ DNS
 # ===================================
 
-resource "ovh_domain_zone_record" "sub_girlysheet" {
+resource "ovh_domain_zone_record" "girlysheet" {
   zone       = var.domain_name
   subdomain  = ""
   fieldtype  = "A"
