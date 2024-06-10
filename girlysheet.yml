@@ -66,26 +66,31 @@ stages:
         echo "Changed directory:" 
         pwd
         echo "Testing OVH API keys"
+              
+        # Fetch the current timestamp from OVH API
         TIMESTAMP=$(curl -s https://api.ovh.com/1.0/auth/time)
         METHOD="GET"
         URL="https://api.ovh.com/1.0/me"
         BODY=""
-        SIGNATURE="\$1$(TF_VAR_ovh_application_secret)+$(TF_VAR_ovh_consumer_key)+$METHOD+$URL+$BODY+$TIMESTAMP"
-        HASHED_SIGNATURE=$(echo -n "$SIGNATURE" | openssl dgst -sha1 -hmac "$(TF_VAR_ovh_application_secret)" | awk '{print $2}')
+        SECRET=$TF_VAR_ovh_application_secret
+        CONSUMER=$TF_VAR_ovh_consumer_key
+        APP=$TF_VAR_ovh_application_key
+        SIGNATURE="\$1$SECRET+$CONSUMER+$METHOD+$URL+$BODY+$TIMESTAMP"
+        HASHED_SIGNATURE=$(echo -n "$SIGNATURE" | openssl dgst -sha1 -hmac "$SECRET" | awk '{print $2}')
 
         RESPONSE=$(curl -X GET \
-        -H "X-Ovh-Application: $(TF_VAR_ovh_application_key)" \
-        -H "X-Ovh-Consumer: $(TF_VAR_ovh_consumer_key)" \
+        -H "X-Ovh-Application: $APP" \
+        -H "X-Ovh-Consumer: $CONSUMER" \
         -H "X-Ovh-Signature: \$1$HASHED_SIGNATURE" \
         -H "X-Ovh-Timestamp: $TIMESTAMP" \
-        "https://api.ovh.com/1.0/me")
-        
+        "$URL")
+
         echo "Response: $RESPONSE"
         tofu init -input=false -reconfigure
         TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
         ls -lah
       env:
-        TF_VAR_ovh_application_ke: $(TF_VAR_ovh_application_ke)
+        TF_VAR_ovh_application_ke: $(TF_VAR_ovh_application_key)
         TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
         TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
         TF_VAR_access_key: $(TF_VAR_access_key)
