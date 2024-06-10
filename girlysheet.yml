@@ -31,8 +31,9 @@ stages:
     displayName: 'Validate Deployment'
 
 - stage: Plan
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
-  - job: terrafoorm_plan
+  - job: terraform_plan
     pool:
         name: Default
     steps:
@@ -41,7 +42,7 @@ stages:
     displayName: 'Plan Terraform Changes'
 
 - stage: Apply
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
   - job: terraform_apply
     pool:
@@ -52,6 +53,7 @@ stages:
     displayName: 'Apply Terraform Changes'
 
 - stage: Configure
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
   - job: ansible_configure
     pool:
