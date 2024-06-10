@@ -26,8 +26,7 @@ stages:
     - checkout: self
     - script: |
         pwd
-        cd $(TF_BUCKET)
-        pwd
+        ls
     displayName: 'Validate Deployment'
 
 - stage: Plan
