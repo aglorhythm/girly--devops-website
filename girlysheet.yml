@@ -65,12 +65,21 @@ stages:
         cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
-        echo "TF_VAR_ovh_application_key: ${TF_VAR_ovh_application_key:0:4}****"
-        echo "TF_VAR_ovh_application_secret: ${TF_VAR_ovh_application_secret:0:4}****"
-        echo "TF_VAR_ovh_consumer_key: ${TF_VAR_ovh_consumer_key:0:4}****"
+        echo "TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
+        echo "TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
+        echo "TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
         tofu init -input=false -reconfigure
         tofu plan -refresh=true -out=tfplan_root
         ls -lah
+      env:
+        TF_VAR_ovh_application_ke: $(TF_VAR_ovh_application_ke)
+        TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
+        TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
+        TF_VAR_access_key: $(TF_VAR_access_key)
+        TF_VAR_secret_key: $(TF_VAR_secret_key)
+        TF_VAR_domain_name: $(TF_VAR_domain_name)
+        TF_VAR_ssh_port: $(TF_VAR_ssh_port)
+        TF_VAR_email: $(TF_VAR_email)
       displayName: 'Plan Tofu changes - Root'
       continueOnError: false
 
