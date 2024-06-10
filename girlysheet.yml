@@ -12,10 +12,14 @@ trigger:
 
 variables:
   - group: TofuSecrets
-  TF_ROOT: $(Build.SourcesDirectory)/tofu
-  TF_BUCKET: $(Build.SourcesDirectory)/tofu/scripts
-  ANS_ROOT: $(Build.SourcesDirectory)/ansible
-  ANS_INVENTORY: $(Build.SourcesDirectory)/ansible/resources
+  - name: TF_ROOT
+    value: $(Build.SourcesDirectory)/tofu
+  - name: TF_BUCKET
+    value: $(Build.SourcesDirectory)/tofu/scripts
+  - name: ANS_ROOT
+    value: $(Build.SourcesDirectory)/ansible
+  - name: ANS_INVENTORY
+    value: $(Build.SourcesDirectory)/ansible/resources
 stages:
 - stage: Validate
   jobs:
