@@ -21,7 +21,32 @@ variables:
     value: $(Build.SourcesDirectory)/ansible
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
+  - name: ACR_NAME
+    value: $(ACR_NAME) # Replace with your ACR name
+  - name: IMAGE_NAME
+    value: $(IMAGE_NAME)
 stages:
+- stage: Build
+  jobs:
+  - job: docker_build
+    pool:
+        name: Default
+    steps:
+    - checkout: self
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false
+        tofu validate
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false
+        tofu validate
+    displayName: 'Validate Tofu deployment'
+    continueOnError: false
 - stage: Validate
   jobs:
   - job: tofu_validate
@@ -140,7 +165,7 @@ stages:
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
 
-- stage: Get-Keys
+- stage: Get_Keys
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
   - job: ansible_get_keys
