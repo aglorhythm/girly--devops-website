@@ -1,14 +1,16 @@
 FROM node:22
 
-# Working directory
+# ✿ Set working directory
 WORKDIR /app
 
-# Copy all files except ignored files from .dockerignore
-COPY . .
 
-# Install dependencies
-RUN npm install --verbose && npm cache clean --force
+# ✿ Install packages
+COPY package.json yarn.lock ./
+RUN yarn install --verbose
+
+# ✿ Copy all files left except ignored files from .dockerignore
+COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "dev"]
