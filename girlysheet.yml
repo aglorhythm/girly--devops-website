@@ -23,6 +23,7 @@ stages:
     pool:
         name: Default
     steps:
+    - checkout: self
     - script: |
         pwd
         cd $(TF_BUCKET)
@@ -36,6 +37,7 @@ stages:
     pool:
         name: Default
     steps:
+    - checkout: self
     - script: |
         pwd
     displayName: 'Plan Terraform Changes'
@@ -47,6 +49,7 @@ stages:
     pool:
         name: Default
     steps:
+    - checkout: self
     - script: |
         pwd
     displayName: 'Apply Terraform Changes'
@@ -58,6 +61,7 @@ stages:
     pool:
         name: Default
     steps:
+    - checkout: self
     - script: |
         pwd
     displayName: 'Configure GS Server'
