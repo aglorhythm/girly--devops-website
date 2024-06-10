@@ -139,7 +139,7 @@ stages:
       displayName: 'Check new created resources'
       continueOnError: false
 
-    - publish: $(Build.SourcesDirectory)/ansible
+    - publish: $(Build.SourcesDirectory)/ansible/resources
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
 
@@ -177,15 +177,18 @@ stages:
         name: Default
     steps:
     - checkout: self
+    - download: current
+      artifact: AnsibleResources
+      displayName: 'Download Ansible resources'
     - script: |
         pwd
         ls -la $(ANS_ROOT)
         echo $(ANS_INVENTORY)/$(KEY_NAME)
         echo "host file:" 
-        cat $(ANS_INVENTORY)/hosts
+        cat $(Pipeline.Workspace)/AnsibleResources/hosts
         echo "group_vars file:" 
-        ls $(ANS_INVENTORY)/group_vars
-        cat $(ANS_INVENTORY)/group_vars/*.yml
+        ls $(Pipeline.Workspace)/AnsibleResources/group_vars
+        cat $(Pipeline.Workspace)/AnsibleResources/group_vars/*.yml
         echo "root:" $(ANS_ROOT)
         cd $(ANS_ROOT)
         ansible --version  
@@ -195,5 +198,6 @@ stages:
       displayName: 'Check Ansible resources'
     
     - script: |
-        ansible-playbook -i $(ANS_INVENTORY)/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
+        pwd
+        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
       displayName: 'Run Ansible playbooks'
