@@ -23,7 +23,7 @@ stages:
   jobs:
   - job: terraform_validate
     pool:
-        vmImage: 'ubuntu-latest'
+        name: Default
     container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
@@ -35,7 +35,7 @@ stages:
   jobs:
   - job: terrafoorm_plan
     pool:
-        vmImage: 'ubuntu-latest'
+        name: Default
     container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
@@ -47,7 +47,7 @@ stages:
   jobs:
   - job: terraform_apply
     pool:
-        vmImage: 'ubuntu-latest'
+        name: Default
     container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
@@ -58,7 +58,7 @@ stages:
   jobs:
   - job: ansible_configure
     pool:
-        vmImage: 'ubuntu-latest'
+        name: Default
     container: ghcr.io/opentofu/opentofu:latest
     steps:
     - script: |
