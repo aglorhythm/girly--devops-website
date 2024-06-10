@@ -6,8 +6,8 @@ WORKDIR /app
 
 
 # Copy package.json and yarn.lock before other files to leverage Docker layer caching
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY package.json .
+COPY package-lock.json .
 RUN ls -la
 
 # Install dependencies
