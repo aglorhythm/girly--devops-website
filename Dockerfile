@@ -5,6 +5,7 @@ WORKDIR /app
 
 # ✿ Copy all files except ignored files from .dockerignore
 COPY . .
+RUN ls -lah
 
 # ✿ Install packages
 RUN npm install 
