@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM node:22.1.0
 
 # ✿ Set working directory
 WORKDIR /app
