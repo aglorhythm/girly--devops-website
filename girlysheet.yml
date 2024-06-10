@@ -65,9 +65,22 @@ stages:
         cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
-        echo "TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)"
-        echo "TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)"
-        echo "TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)"
+        echo "Testing OVH API keys"
+        TIMESTAMP=$(curl -s https://api.ovh.com/1.0/auth/time)
+        METHOD="GET"
+        URL="https://api.ovh.com/1.0/me"
+        BODY=""
+        SIGNATURE="\$1$TF_VAR_ovh_application_secret+$TF_VAR_ovh_consumer_key+$METHOD+$URL+$BODY+$TIMESTAMP"
+        HASHED_SIGNATURE=$(echo -n "$SIGNATURE" | openssl dgst -sha1 -hmac "$TF_VAR_ovh_application_secret" | awk '{print $2}')
+
+        RESPONSE=$(curl -X GET \
+        -H "X-Ovh-Application: $TF_VAR_ovh_application_key" \
+        -H "X-Ovh-Consumer: $TF_VAR_ovh_consumer_key" \
+        -H "X-Ovh-Signature: \$1$HASHED_SIGNATURE" \
+        -H "X-Ovh-Timestamp: $TIMESTAMP" \
+        "https://api.ovh.com/1.0/me")
+        
+        echo "Response: $RESPONSE"
         tofu init -input=false -reconfigure
         tofu plan -refresh=true -out=tfplan_root
         ls -lah
