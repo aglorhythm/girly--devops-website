@@ -82,7 +82,7 @@ stages:
         
         echo "Response: $RESPONSE"
         tofu init -input=false -reconfigure
-        tofu plan -refresh=true -out=tfplan_root
+        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
         ls -lah
       env:
         TF_VAR_ovh_application_ke: $(TF_VAR_ovh_application_ke)
