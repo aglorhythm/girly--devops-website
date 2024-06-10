@@ -65,11 +65,6 @@ stages:
         cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
-        echo "Clearing environment variables"
-        unset TF_VAR_ovh_application_key
-        unset TF_VAR_ovh_application_secret
-        unset TF_VAR_ovh_consumer_key
-        source ~/.bashrc
         echo "TF_VAR_ovh_application_key: ${TF_VAR_ovh_application_key:0:4}****"
         echo "TF_VAR_ovh_application_secret: ${TF_VAR_ovh_application_secret:0:4}****"
         echo "TF_VAR_ovh_consumer_key: ${TF_VAR_ovh_consumer_key:0:4}****"
