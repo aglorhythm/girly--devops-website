@@ -6,7 +6,6 @@ WORKDIR /app
 
 # Use the HTTP registry
 RUN npm config set registry "http://registry.npmjs.org" && \
-    npm install -g yarn && \
     yarn config set registry "http://registry.npmjs.org"
 
 # Copy package.json and yarn.lock before other files to leverage Docker layer caching
