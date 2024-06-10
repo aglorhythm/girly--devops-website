@@ -63,7 +63,7 @@ stages:
         ls -lah
       displayName: 'Plan Tofu changes - Root'
 
-    - publish: $(TF_BUCKET)/scripts/tfplan_bucket
+    - publish: $(TF_BUCKET)/tfplan_bucket
       artifact: TofuPlanBucket
       displayName: 'Publish Tofu plan for the s3 bucket'
 
@@ -111,7 +111,7 @@ stages:
         ls $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars
         cat $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars/*.yml
       displayName: 'Check new created resources'
-      
+
     - publish: $(Build.SourcesDirectory)/ansible
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
