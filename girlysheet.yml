@@ -15,8 +15,6 @@ variables:
   TF_BUCKET: $(Build.SourcesDirectory)/terraform/scripts
   ANS_ROOT: $(Build.SourcesDirectory)/ansible
   ANS_INVENTORY: $(Build.SourcesDirectory)/ansible/resources
-  GITHUB_USERNAME: $(GithubUsername)
-  GITHUB_PAT: $(GithubPat)
 
 stages:
 - stage: Validate
@@ -27,7 +25,8 @@ stages:
     steps:
     - script: |
         pwd
-        tofu -v
+        cd $(TF_BUCKET)
+        pwd
     displayName: 'Validate Deployment'
 
 - stage: Plan
