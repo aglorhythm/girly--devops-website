@@ -86,6 +86,7 @@ stages:
         "$URL")
 
         echo "Response: $RESPONSE"
+        echo "Key: $APP"
         tofu init -input=false -reconfigure
         TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
         ls -lah
