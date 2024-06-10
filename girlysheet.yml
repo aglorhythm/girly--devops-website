@@ -39,6 +39,7 @@ stages:
         tofu init -input=false
         tofu validate
     displayName: 'Validate Tofu deployment'
+    continueOnError: false
 
 - stage: Plan
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
@@ -56,6 +57,8 @@ stages:
         tofu plan -refresh=true -out=tfplan_bucket -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
         ls -lah
       displayName: 'Plan Tofu changes - Bucket'
+      continueOnError: false
+
     - script: |
         cd $(TF_ROOT)
         echo "Changed directory:" 
@@ -64,6 +67,7 @@ stages:
         tofu plan -refresh=true -out=tfplan_root -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
         ls -lah
       displayName: 'Plan Tofu changes - Root'
+      continueOnError: false
 
     - publish: $(TF_BUCKET)/tfplan_bucket
       artifact: TofuPlanBucket
@@ -96,6 +100,7 @@ stages:
         tofu init -input=false -reconfigure
         tofu apply tfplan_bucket
       displayName: 'Apply Tofu changes - Bucket'
+      continueOnError: false
 
     - script: |
         cd $(TF_ROOT)
@@ -104,6 +109,7 @@ stages:
         tofu init -input=false -reconfigure
         tofu apply tfplan_root
       displayName: 'Apply Tofu changes - Root'
+      continueOnError: false
 
     - script: |
         echo "New host file:" 
@@ -113,6 +119,7 @@ stages:
         ls $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars
         cat $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars/*.yml
       displayName: 'Check new created resources'
+      continueOnError: false
 
     - publish: $(Build.SourcesDirectory)/ansible
       artifact: AnsibleResources
