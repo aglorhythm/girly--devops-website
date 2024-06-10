@@ -165,8 +165,8 @@ stages:
       displayName: 'Get key for GS Server'
       continueOnError: false
 
-    - publish: $(ANS_ROOT)
-      artifact: AnsibleRoot
+    - publish: $(ANS_ROOT)/$(KEY_NAME)
+      artifact: AnsibleKey
       displayName: 'Publish Ansible resources with key'
 
 - stage: Configure
@@ -204,8 +204,9 @@ stages:
         pwd
         ls -la
         echo "Key path:"
-        echo $(ANS_ROOT)/$(KEY_NAME)
+        echo $(Pipeline.Workspace)/AnsibleKey
+        ls $(Pipeline.Workspace)/AnsibleKey
         echo "Resources:"
-        ls $(Pipeline.Workspace)/AnsibleResources
-        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
+        ls $(Pipeline.Workspace)/AnsibleKey
+        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(Pipeline.Workspace)/AnsibleKey backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
       displayName: 'Run Ansible playbooks'
