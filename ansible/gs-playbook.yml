@@ -1,6 +1,6 @@
 - name: Configure EC2 instance 
   become: yes 
-  hosts: morningnews
+  hosts: girlysheet
   tasks: 
     - name: Update apt package
       ansible.builtin.apt:
@@ -104,10 +104,10 @@
         name: nginx
         state: present
     
-    - name: Configure Nginx as a reverse proxy for morningnews
+    - name: Configure Nginx as a reverse proxy for girlysheet
       ansible.builtin.template:
         src: nginx.conf.j2
-        dest: /etc/nginx/sites-available/morningnews
+        dest: /etc/nginx/sites-available/girlysheet
         owner: root
         group: root
         mode: 0644
@@ -115,8 +115,8 @@
     - name: Link nginx config
       ansible.builtin.file:
         state: link
-        src: '/etc/nginx/sites-available/morningnews'
-        path: '/etc/nginx/sites-enabled/morningnews'
+        src: '/etc/nginx/sites-available/girlysheet'
+        path: '/etc/nginx/sites-enabled/girlysheet'
 
     - name: Remove default config
       ansible.builtin.file:
