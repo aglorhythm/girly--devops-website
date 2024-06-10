@@ -100,7 +100,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply tfplan_bucket$(Build.ArtifactStagingDirectory)/TofuPlanBucket/tfplan_bucket
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket
       displayName: 'Apply Tofu changes - Bucket'
       continueOnError: false
 
@@ -109,7 +109,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Build.ArtifactStagingDirectory)/TofuPlanBucket/tfplan_root
+        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root
       displayName: 'Apply Tofu changes - Root'
       continueOnError: false
 
