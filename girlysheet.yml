@@ -12,6 +12,7 @@ trigger:
 
 variables:
   - group: TofuSecrets
+  - group : Commands
   - name: TF_ROOT
     value: $(Build.SourcesDirectory)/tofu
   - name: TF_BUCKET
@@ -138,6 +139,31 @@ stages:
     - publish: $(Build.SourcesDirectory)/ansible
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
+
+- stage: Get-Keys
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
+  jobs:
+  - job: ansible_get_keys
+    pool:
+        name: Default
+    steps:
+    - checkout: self
+    - script: |
+        pwd
+        cd $(ANS_ROOT)
+        ls
+        ${GET_KEY}
+        ${SECURE_KEY}
+        echo "Retrieved key:" 
+        ls
+      env:
+        GET_KEY: $(GET_KEY)
+        SECURE_KEY: $(SECURE_KEY)
+    displayName: 'Get key for GS Server'
+    - publish: $(ANS_ROOT)
+      artifact: AnsibleRoot
+      displayName: 'Publish Ansible resources with key'
+
 
 - stage: Configure
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
