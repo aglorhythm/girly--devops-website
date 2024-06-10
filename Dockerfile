@@ -1,14 +1,13 @@
-FROM node:22
+FROM debian:bookworm-slim
 
 # ✿ Set working directory
 WORKDIR /app
-
 
 # ✿ Install packages
 COPY package.json yarn.lock ./
 RUN yarn install --verbose
 
-# ✿ Copy all files left except ignored files from .dockerignore
+# Copy all files except ignored files from .dockerignore
 COPY . .
 
 EXPOSE 3000
