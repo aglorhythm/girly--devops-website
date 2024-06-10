@@ -4,15 +4,13 @@ FROM node:22.1.0
 # ✿ Set working directory
 WORKDIR /app
 
-# Use the HTTP registry
-RUN npm config set registry "http://registry.npmjs.org" && \
-    yarn config set registry "http://registry.npmjs.org"
 
 # Copy package.json and yarn.lock before other files to leverage Docker layer caching
-COPY package.json yarn.lock .
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
 # Install dependencies
-RUN yarn install --verbose
+RUN yarn install
 
 # Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
