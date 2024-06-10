@@ -65,6 +65,9 @@ stages:
         cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
+        echo "Using OVH Application Key: $APP"
+        echo "Using OVH Application Secret: ${SECRET:0:4}****"
+        echo "Using OVH Consumer Key: ${CONSUMER:0:4}****"
         echo "Testing OVH API keys"
               
         # Fetch the current timestamp from OVH API
@@ -91,7 +94,7 @@ stages:
         TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
         ls -lah
       env:
-        TF_VAR_ovh_application_ke: $(TF_VAR_ovh_application_key)
+        TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
         TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
         TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
         TF_VAR_access_key: $(TF_VAR_access_key)
