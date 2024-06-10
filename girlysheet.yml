@@ -22,6 +22,7 @@ variables:
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
 
+stages:
 - stage: Validate
   jobs:
   - job: tofu_validate
