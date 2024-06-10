@@ -53,6 +53,7 @@ stages:
         tofu init -input=false -reconfigure
         tofu plan -refresh=true -out=tfplan_bucket -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
         ls -lah
+      displayName: 'Plan Tofu changes - Bucket'
     - script: |
         cd $(TF_ROOT)
         echo "Changed directory:" 
@@ -60,10 +61,12 @@ stages:
         tofu init -input=false -reconfigure
         tofu plan -refresh=true -out=tfplan_root -var="access_key=$(AWS_ACCESS_KEY_ID)" -var="secret_key=$(AWS_SECRET_ACCESS_KEY)" -var="region=$(AWS_DEFAULT_REGION)"
         ls -lah
-    displayName: 'Plan Tofu changes'
+      displayName: 'Plan Tofu changes - Root'
+
     - publish: $(TF_BUCKET)/scripts/tfplan_bucket
       artifact: TofuPlanBucket
       displayName: 'Publish Tofu plan for the s3 bucket'
+
     - publish: $(TF_ROOT)/tfplan_root
       artifact: TofuPlanRoot
       displayName: 'Publish Tofu plan for the root script'
@@ -79,21 +82,27 @@ stages:
     - download: current
       artifact: TofuPlanBucket
       displayName: 'Download Tofu plan for the s3 bucket'
+
     - download: current
       artifact: TofuPlanRoot
       displayName: 'Download Tofu plan for the root script'
+
     - script: |
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
         tofu apply tfplan_bucket
+      displayName: 'Apply Tofu changes - Bucket'
+
     - script: |
         cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
         tofu apply tfplan_root
+      displayName: 'Apply Tofu changes - Root'
+
     - script: |
         echo "New host file:" 
         ls $(Build.SourcesDirectory)/ansible
@@ -101,7 +110,8 @@ stages:
         echo "New group vars file:" 
         ls $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars
         cat $(Build.SourcesDirectory)/ansible/${ENVIRONMENT}/group_vars/*.yml
-    displayName: 'Apply Tofu Changes'
+      displayName: 'Check new created resources'
+      
     - publish: $(Build.SourcesDirectory)/ansible
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
