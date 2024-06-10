@@ -21,11 +21,6 @@ variables:
     value: $(Build.SourcesDirectory)/ansible
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
-  - name: ACR_NAME
-    value: $(ACR_NAME) # Replace with your ACR name
-  - name: IMAGE_NAME
-    value: $(IMAGE_NAME)
-stages:
 - stage: Build
   jobs:
   - job: docker_build
