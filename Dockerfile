@@ -11,7 +11,7 @@ COPY package-lock.json package-lock.json
 RUN ls -la
 
 # Install dependencies
-RUN yarn install
+RUN npm install
 
 # Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
@@ -22,4 +22,4 @@ RUN ls -la
 EXPOSE 3000
 
 # Command to start the app using Yarn
-CMD ["yarn", "dev"]
+CMD ["npm", "run", "dev"]
