@@ -192,12 +192,12 @@ stages:
         ls -la
         echo "Key file:"
         ls -la $(ANS_ROOT)/key
-        chmod 400 $(ANS_ROOT)/key/*.pem
+        chmod 400 $(ANS_ROOT)/key/$(KEY_NAME)
         ls -la $(ANS_ROOT)/key
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
         export ANSIBLE_HOST_KEY_CHECKING=False
-        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/key/*.pem backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
+        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/key/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
       displayName: 'Run Ansible playbooks'
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
