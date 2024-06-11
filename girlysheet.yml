@@ -210,7 +210,7 @@ stages:
         ls -la $(Pipeline.Workspace)/AnsibleResources
         export ANSIBLE_HOST_KEY_CHECKING=False
         chmod 400 $(Pipeline.Workspace)/AnsibleKey
-        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(Pipeline.Workspace)/AnsibleKey backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
+        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(Pipeline.Workspace)/AnsibleKey/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
       displayName: 'Run Ansible playbooks'
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
