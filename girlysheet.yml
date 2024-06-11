@@ -12,7 +12,8 @@ trigger:
 
 variables:
   - group: TofuSecrets
-  - group : Commands
+  - group: Commands
+  - group: Acr
   - name: TF_ROOT
     value: $(Build.SourcesDirectory)/tofu
   - name: TF_BUCKET
@@ -197,7 +198,10 @@ stages:
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
         export ANSIBLE_HOST_KEY_CHECKING=False
-        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/key/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL)"
+        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/key/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL) acr_server=$(ACR_SERVER) acr_password=$(ACR_PASSWORD) acr_username=(ACR_USER)"
       displayName: 'Run Ansible playbooks'
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
+        ACR_PASSORD: $(ACR_PASSWORD)
+        ACR_SERVER: $(ACR_SERVER)
+        ACR_USER: $(ACR_USER)
