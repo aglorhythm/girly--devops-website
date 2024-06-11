@@ -164,7 +164,7 @@ stages:
       displayName: 'Get key for GS Server'
       continueOnError: false
 
-    - publish: $(ANS_ROOT)/$(KEY_NAME)
+    - publish: $(Build.SourcesDirectory)/ansible/*.pem
       artifact: AnsibleKey
       displayName: 'Publish Ansible resources with key'
 
@@ -185,7 +185,6 @@ stages:
     - script: |
         pwd
         ls -la $(ANS_ROOT)
-        echo $(ANS_INVENTORY)/$(KEY_NAME)
         echo "host file:" 
         cat $(Pipeline.Workspace)/AnsibleResources/hosts
         echo "group_vars file:" 
@@ -206,8 +205,7 @@ stages:
         pwd
         ls -la
         echo "Key path:"
-        echo $(Pipeline.Workspace)/AnsibleKey
-        ls $(Pipeline.Workspace)/AnsibleKey
+        ls -la $(Pipeline.Workspace)/AnsibleKey
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
         export ANSIBLE_HOST_KEY_CHECKING=False
