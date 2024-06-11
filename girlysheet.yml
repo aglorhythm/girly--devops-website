@@ -204,7 +204,7 @@ stages:
         ls -la
         echo "Key file:"
         ls -la $(Pipeline.Workspace)/AnsibleKey
-        sudo chmod -R 700 $(Pipeline.Workspace)/AnsibleKey
+        sudo chmod -R +xr $(Pipeline.Workspace)/AnsibleKey
         ls -la
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
