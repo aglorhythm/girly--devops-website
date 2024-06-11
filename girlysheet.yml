@@ -22,7 +22,7 @@ variables:
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
   - name: KEY_NAME
-    value: girlysheet_front_key_pair_$(Build.BuildId).pem
+    value: girlysheet_front_key_pair.pem
 
 stages:
 - stage: Validate
