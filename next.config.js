@@ -1,5 +1,6 @@
 const path = require('path')
 require('dotenv').config()
+const withVideos = require('next-videos')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -28,6 +29,8 @@ const nextConfig = {
           ]
         return config
     },
+
+    
     
 };
-module.exports = nextConfig
+module.exports = withVideos(nextConfig);
