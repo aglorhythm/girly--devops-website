@@ -78,7 +78,12 @@
     - name: Show current directory
       ansible.builtin.debug:
         msg: "The content of current directory is: {{ ls_output.stdout }}"
-      
+    
+    - name: Login to ACR
+      ansible.builtin.shell:
+        cmd: echo "{{ acr_password }}" | docker login {{ acr_server }} --username {{ acr_username }} --password-stdin
+      no_log: true  
+    
     - name: Launch the container using Docker Compose
       ansible.builtin.shell:
         cmd: "docker-compose up -d"
