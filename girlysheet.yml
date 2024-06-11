@@ -176,9 +176,6 @@ stages:
     - download: current
       artifact: AnsibleResources
       displayName: 'Download Ansible resources'
-    - download: current
-      artifact: AnsibleKey
-      displayName: 'Download Ansible key'
     - script: |
         pwd
         ls -la $(ANS_ROOT)
@@ -201,7 +198,7 @@ stages:
         echo "Changed directory:"
         pwd
         ls -la
-        echo "Key path:"
+        echo "Key file:"
         ls -la $(Pipeline.Workspace)/AnsibleKey
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
