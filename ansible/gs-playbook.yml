@@ -1,0 +1,171 @@
+- name: Configure EC2 instance 
+  become: yes 
+  hosts: girlysheet
+  tasks: 
+    - name: Update apt package
+      ansible.builtin.apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+
+    - name: Install required Docker modules
+      ansible.builtin.apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl 
+          - gnupg-agent
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Add the Official Docker GPG Key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/debian/gpg 
+        state: present
+    
+    - name: Get distribution codename
+      ansible.builtin.command:
+        cmd: lsb_release -cs
+      register: distro_codename
+
+    - name: Add Docker repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ distro_codename.stdout }} stable"
+        state: present
+
+    - name: Install Docker CE
+      ansible.builtin.apt:
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: yes
+    
+    - name: Echo Docker version
+      ansible.builtin.command:
+        cmd: docker --version
+      register: docker_version_output
+
+    - name: Display Docker version
+      ansible.builtin.debug:
+        msg: "The Docker version installed is: {{ docker_version_output.stdout }}"
+    
+    - name: Download Docker-compose
+      ansible.builtin.get_url: 
+        url: https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+
+    - name: Copy docker-compose.yml from local to remote server
+      ansible.builtin.copy:
+        src: ./docker-compose.yml
+        dest: /home/admin/docker-compose.yml
+
+    - name: Display current working directory
+      ansible.builtin.command: pwd
+      register: pwd_output
+    
+    - name: Display directory content
+      ansible.builtin.command: ls -a
+      register: ls_output
+
+    - name: Show current directory
+      ansible.builtin.debug:
+        msg: "The current working directory is: {{ pwd_output.stdout }}"
+    
+    - name: Show current directory
+      ansible.builtin.debug:
+        msg: "The content of current directory is: {{ ls_output.stdout }}"
+    
+    - name: Login to ACR
+      ansible.builtin.shell:
+        cmd: echo "{{ acr_password }}" | docker login {{ acr_server }} --username {{ acr_username }} --password-stdin
+    
+    - name: Launch the container using Docker Compose
+      ansible.builtin.shell:
+        cmd: "docker-compose up -d"
+      args:
+        chdir: /home/admin
+      environment:
+        BACKEND_URL: "{{ backend_url }}"
+        FRONTEND_URL: "{{ frontend_url }}"
+    
+    - name: Check Docker Compose containers
+      ansible.builtin.shell:
+        cmd: "docker-compose ps"
+      args:
+        chdir: /home/admin
+      register: docker_ps_output
+    
+    - name: Show Docker Compose containers
+      ansible.builtin.debug:
+        msg: "{{ docker_ps_output.stdout }}"
+
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+    
+    - name: Configure Nginx as a reverse proxy for girlysheet
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/girlysheet
+        owner: root
+        group: root
+        mode: 0644
+      notify: 
+        - reload nginx
+
+    - name: Link nginx config
+      ansible.builtin.file:
+        state: link
+        src: '/etc/nginx/sites-available/girlysheet'
+        path: '/etc/nginx/sites-enabled/girlysheet'
+
+    - name: Remove default config
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/nginx/sites-available/default
+        - /etc/nginx/sites-enabled/default
+      notify:
+        - reload nginx
+    
+    - name: Test Nginx configuration
+      ansible.builtin.command:
+        cmd: nginx -t
+      register: nginx_test
+      ignore_errors: true
+
+    - name: Display Nginx test result
+      ansible.builtin.debug:
+        msg: "{{ nginx_test.stdout }}"
+
+    - name: Install Certbot and its Nginx plugin
+      ansible.builtin.apt:
+        name:
+          - certbot
+          - python3-certbot-nginx
+        state: present
+    
+    - name: Ensure Nginx is running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+    
+    - name: Get SSL certificate using Certbot
+      ansible.builtin.command: >
+        certbot --nginx -d {{ instance_dns_zone }} --non-interactive --agree-tos --email {{ certbot_email }}
+      args:
+        creates: /etc/letsencrypt/live/{{ instance_dns_zone }}/fullchain.pem
+      notify:
+        - reload nginx
+      
+  handlers:
+  - name: reload nginx
+    ansible.builtin.service:
+      name: nginx
+      state: reloaded   

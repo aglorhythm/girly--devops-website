@@ -101,9 +101,18 @@ module "ec2" {
 # ✿ DNS
 # ===================================
 
+resource "ovh_domain_zone_record" "girlysheet" {
+  zone       = var.domain_name
+  subdomain  = ""
+  fieldtype  = "A"
+  ttl        = 3600
+  target     = module.ec2.instance_girlysheet_ip
+}
+
 resource "ovh_domain_zone_record" "sub_girlysheet" {
   zone       = var.domain_name
   fieldtype  = "A"
+  subdomain  = "www"
   ttl        = 3600
   target     = module.ec2.instance_girlysheet_ip
 }

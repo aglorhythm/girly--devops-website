@@ -1,0 +1,211 @@
+# ===================================
+# Author: @aglorhythm / girlysheet.cloud ✿
+# Description: This script is retrieved by azure pipelines.
+# The docker image is build and pushed in another azure pipeline. 
+# I cannot add different environments because of budget purpose
+# ===================================
+
+trigger:
+  branches:
+    include:
+    - main
+
+variables:
+  - group: TofuSecrets
+  - group: Commands
+  - group: Acr
+  - name: TF_ROOT
+    value: $(Build.SourcesDirectory)/tofu
+  - name: TF_BUCKET
+    value: $(Build.SourcesDirectory)/tofu/scripts
+  - name: ANS_ROOT
+    value: $(Build.SourcesDirectory)/ansible
+  - name: ANS_INVENTORY
+    value: $(Build.SourcesDirectory)/ansible/resources
+  - name: KEY_NAME
+    value: girlysheet_front_key_pair.pem
+
+stages:
+- stage: Validate
+  jobs:
+  - job: tofu_validate
+    pool:
+        name: Default
+    steps:
+    - checkout: self
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false
+        tofu validate
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false
+        tofu validate
+      displayName: 'Validate Tofu deployment'
+      continueOnError: false
+
+- stage: Plan
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
+  jobs:
+  - job: tofu_plan
+    pool:
+        name: Default
+    steps:
+    - checkout: self
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false -reconfigure
+        tofu plan -refresh=true -out=tfplan_bucket
+        ls -lah
+      displayName: 'Plan Tofu changes - Bucket'
+      continueOnError: false
+
+    - script: |
+        cd $(TF_ROOT)
+        echo "Changed directory:" 
+        pwd
+        echo "Using OVH Application Key: ${TF_VAR_ovh_application_key:0:4}****"
+        echo "Using OVH Application Secret: ${TF_VAR_ovh_application_secret:0:4}****"
+        echo "Using OVH Consumer Key: ${TF_VAR_ovh_consumer_key:0:4}****"
+        tofu init -input=false -reconfigure
+        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
+        ls -lah
+      env:
+        TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
+        TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
+        TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
+        TF_VAR_access_key: $(TF_VAR_access_key)
+        TF_VAR_secret_key: $(TF_VAR_secret_key)
+        TF_VAR_domain_name: $(TF_VAR_domain_name)
+        TF_VAR_ssh_port: $(TF_VAR_ssh_port)
+        TF_VAR_email: $(TF_VAR_email)
+      displayName: 'Plan Tofu changes - Root'
+      continueOnError: false
+
+    - publish: $(TF_BUCKET)/tfplan_bucket
+      artifact: TofuPlanBucket
+      displayName: 'Publish Tofu plan for the s3 bucket'
+
+    - publish: $(TF_ROOT)/tfplan_root
+      artifact: TofuPlanRoot
+      displayName: 'Publish Tofu plan for the root script'
+
+- stage: Apply
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
+  jobs:
+  - job: tofu_apply
+    pool:
+        name: Default
+    steps:
+    - checkout: self
+    - download: current
+      artifact: TofuPlanBucket
+      displayName: 'Download Tofu plan for the s3 bucket'
+
+    - download: current
+      artifact: TofuPlanRoot
+      displayName: 'Download Tofu plan for the root script'
+
+    - script: |
+        cd $(TF_BUCKET)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false -reconfigure
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket
+      displayName: 'Apply Tofu changes - Bucket'
+      continueOnError: false
+
+    - script: |
+        cd $(TF_ROOT)
+        echo "Changed directory:" 
+        pwd
+        tofu init -input=false -reconfigure
+        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root
+      displayName: 'Apply Tofu changes - Root'
+      continueOnError: false
+
+    - script: |
+        echo "New host file:" 
+        ls $(Build.SourcesDirectory)/ansible
+        cat $(Build.SourcesDirectory)/ansible/resources/hosts
+        echo "New group vars file:" 
+        ls $(Build.SourcesDirectory)/ansible/resources/group_vars
+        cat $(Build.SourcesDirectory)/ansible/resources/group_vars/*.yml
+      displayName: 'Check new created resources'
+      continueOnError: false
+
+    - publish: $(Build.SourcesDirectory)/ansible/resources
+      artifact: AnsibleResources
+      displayName: 'Publish Ansible resources'
+
+
+- stage: Configure
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
+  jobs:
+  - job: ansible_configure
+    pool:
+        name: Default
+    steps:
+    - checkout: self
+    - download: current
+      artifact: AnsibleResources
+      displayName: 'Download Ansible resources'
+    - script: |
+        pwd
+        ls -la $(ANS_ROOT)
+        echo "host file:" 
+        cat $(Pipeline.Workspace)/AnsibleResources/hosts
+        echo "group_vars file:" 
+        ls $(Pipeline.Workspace)/AnsibleResources/group_vars
+        cat $(Pipeline.Workspace)/AnsibleResources/group_vars/*.yml
+        echo "root:" $(ANS_ROOT)
+        cd $(ANS_ROOT)
+        ansible --version  
+        echo "Variables passed:"
+        echo ${BACKEND_URL} ${FRONTEND_URL}
+        sleep 30
+      displayName: 'Check Ansible resources'
+
+    - script: |
+        pwd
+        cd $(ANS_ROOT)
+        echo "Changed directory:"
+        ls -la
+        mkdir key
+        cd key
+        aws secretsmanager get-secret-value --secret-id girlysheet_front_privkey --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
+        echo "Retrieved key:" 
+        ls -la
+      displayName: 'Get key for GS Server'
+      continueOnError: false
+    
+    - script: |
+        pwd
+        cd $(ANS_ROOT)
+        echo "Changed directory:"
+        pwd
+        ls -la
+        echo "Key file:"
+        ls -la $(ANS_ROOT)/key
+        chmod 400 $(ANS_ROOT)/key/$(KEY_NAME)
+        ls -la $(ANS_ROOT)/key
+        echo "Resources:"
+        ls -la $(Pipeline.Workspace)/AnsibleResources
+        export ANSIBLE_HOST_KEY_CHECKING=False
+        echo "ACR vars:"
+        echo $(ACR_PASSWORD) $(ACR_SERVER) $(ACR_USER)
+        ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/key/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL) acr_server=$(ACR_SERVER) acr_password=$(ACR_PASSWORD) acr_username=$(ACR_USER)"
+      displayName: 'Run Ansible playbooks'
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: "False"
+        ACR_PASSORD: $(ACR_PASSWORD)
+        ACR_SERVER: $(ACR_SERVER)
+        ACR_USER: $(ACR_USER)
+        FRONTEND_URL: $(FRONTEND_URL)
+        BACKEND_URL: $(BACKEND_URL)

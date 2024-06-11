@@ -31,7 +31,7 @@ The website is ot online yet ! But below you will find the architecture of this 
 - **Azure MySQL** : The primary database used by the website, storing all dynamic data and user information securely and efficiently.
 
 
-![Girlysheet Architecture](https://res.cloudinary.com/dhugrtkns/image/upload/v1717665234/girlysheet_architecture_iwox1e.png)
+![Girlysheet Architecture](https://res.cloudinary.com/dhugrtkns/image/upload/v1718036143/girlysheet_architecture_v2_fxnwqh.png)
 
 ## Stay Connected 🌹
 
