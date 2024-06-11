@@ -198,6 +198,8 @@ stages:
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
         export ANSIBLE_HOST_KEY_CHECKING=False
+        echo "ACR vars:"
+        echo $(ACR_PASSWORD) $(ACR_SERVER) $(ACR_USER)
         ansible-playbook -i $(Pipeline.Workspace)/AnsibleResources/hosts gs-playbook.yml -vvv -e "ansible_ssh_private_key_file=$(ANS_ROOT)/key/$(KEY_NAME) backend_url=$(BACKEND_URL) frontend_url=$(FRONTEND_URL) acr_server=$(ACR_SERVER) acr_password=$(ACR_PASSWORD) acr_username=(ACR_USER)"
       displayName: 'Run Ansible playbooks'
       env:
