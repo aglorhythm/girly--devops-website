@@ -196,6 +196,7 @@ stages:
       displayName: 'Check Ansible resources'
     
     - script: |
+        whoami
         pwd
         cd $(ANS_ROOT)
         echo "Changed directory:"
@@ -203,6 +204,8 @@ stages:
         ls -la
         echo "Key file:"
         ls -la $(Pipeline.Workspace)/AnsibleKey
+        sudo chmod -R 700 $(Pipeline.Workspace)/AnsibleKey
+        ls -la
         echo "Resources:"
         ls -la $(Pipeline.Workspace)/AnsibleResources
         export ANSIBLE_HOST_KEY_CHECKING=False
