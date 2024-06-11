@@ -81,7 +81,7 @@
     
     - name: Login to ACR
       ansible.builtin.shell:
-        cmd: echo "{{ acr_password }}" | docker login "{{ acr_server }}" --username "{{ acr_username }}" --password-stdin
+        cmd: echo "{{ acr_password }}" | docker login "{ acr_server }} --username {{ acr_username }} --password-stdin
     
     - name: Launch the container using Docker Compose
       ansible.builtin.shell:
