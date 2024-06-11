@@ -158,13 +158,10 @@ stages:
         aws secretsmanager get-secret-value --secret-id girlysheet_front_privkey --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
         echo "Retrieved key:" 
         ls
-      env:
-        GET_KEY: $(GET_KEY)
-        SECURE_KEY: $(SECURE_KEY)
       displayName: 'Get key for GS Server'
       continueOnError: false
 
-    - publish: $(Build.SourcesDirectory)/ansible/$(KEY_NAME)
+    - publish: $(Build.SourcesDirectory)/ansible/girlysheet_front_key_pair.pem
       artifact: AnsibleKey
       displayName: 'Publish Ansible resources with key'
 
