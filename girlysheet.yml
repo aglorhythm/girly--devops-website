@@ -5,6 +5,15 @@
 # I cannot add different environments because of budget purpose
 # ===================================
 
+resources:
+  pipelines:
+  - pipeline: dockerBuild  
+    source: Build_Docker_Image  
+    trigger: 
+      branches:
+        include:
+        - development  # Ensure it triggers on changes to the development branch
+
 trigger:
   branches:
     include:
