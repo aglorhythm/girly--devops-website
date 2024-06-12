@@ -2,6 +2,9 @@
 FROM node:alpine
 
 
+# ✿ Update packages and install curl and bash
+RUN apk update && apk add --no-cache curl bash
+
 # ✿ Install newer version of yarn 
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 4.3.0
 ENV PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
