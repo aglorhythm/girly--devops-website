@@ -16,7 +16,6 @@ COPY .yarnrc.yml .
 COPY yarn.lock .
 
 # ✿ Install dependencies
-RUN yarn config set registry https://registry.yarnpkg.com
 RUN yarn install --immutable --verbose
 
 # ✿ Copy all files left except ignored files from .dockerignore, then list them
