@@ -1,16 +1,15 @@
 # Use the official Node.js 22.1.0 image
-FROM node:alpine
+FROM node:22.1.0-bullseye
 
 
 # ✿ Update packages and install curl and bash
-RUN apk update && apk add --no-cache curl bash
+RUN apt-get update && apt-get install -y curl bash && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ✿ Install newer version of yarn 
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 4.3.0
 ENV PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # ✿ Set working directory
-RUN mkdir -p /app
 WORKDIR /app
 
 # ✿ Copy package.json and yarn.lock before other files to leverage Docker layer caching
@@ -26,8 +25,9 @@ COPY . .
 
 # ✿ Expose port 3000 for the application
 EXPOSE 3000
+
+# ✿ Build app
 RUN yarn build
 
-
-# ✿ Command to start the app using yarn
+# ✿ Run app
 CMD ["yarn", "run", "start"]
