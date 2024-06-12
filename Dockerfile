@@ -12,11 +12,10 @@ RUN ls -la
 
 # Install dependencies
 RUN npm config set registry http://registry.npmjs.org/
-RUN npm ci --verbose
+RUN npm install --verbose
 
 # Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
-RUN ls -la
 
 
 # Expose port 3000 for the application
