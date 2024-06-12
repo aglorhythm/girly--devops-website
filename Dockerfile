@@ -12,13 +12,15 @@ COPY yarn.lock .
 
 # Install dependencies
 RUN yarn config set registry https://registry.yarnpkg.com
-RUN yarn install --frozen-lockfile --verbose
+RUN yarn install --prefer-offline --frozen-lockfile --verbose
 
 # Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
 
 # Expose port 3000 for the application
 EXPOSE 3000
+RUN yarn build
+# Build app
 
-# Command to start the app using Npm
+# Command to start the app using yarn
 CMD ["yarn", "run", "start"]
