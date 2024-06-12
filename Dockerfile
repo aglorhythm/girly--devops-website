@@ -11,7 +11,8 @@ COPY package-lock.json .
 RUN ls -la
 
 # Install dependencies
-RUN npm install
+RUN npm config set registry http://registry.npmjs.org/
+RUN npm ci --verbose
 
 # Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
