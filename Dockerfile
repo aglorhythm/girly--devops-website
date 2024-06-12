@@ -1,5 +1,5 @@
 # Use the official Node.js 22.1.0 image
-FROM node:22.1.0
+FROM node:alpine
 
 # ✿ Set working directory
 WORKDIR /app
