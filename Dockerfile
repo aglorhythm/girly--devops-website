@@ -9,9 +9,10 @@ WORKDIR /app
 # Copy package.json and yarn.lock before other files to leverage Docker layer caching
 COPY package.json .
 COPY package-lock.json .
+COPY yarn.lock .
 
 # Install dependencies
-RUN npm install --verbose
+RUN yarn install --verbose
 
 # Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
@@ -20,4 +21,4 @@ COPY . .
 EXPOSE 3000
 
 # Command to start the app using Npm
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "dev"]
