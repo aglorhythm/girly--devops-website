@@ -2,6 +2,7 @@
 FROM node:alpine
 
 # ✿ Set working directory
+RUN mkdir -p /app
 WORKDIR /app
 
 
