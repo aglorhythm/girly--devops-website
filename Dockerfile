@@ -11,10 +11,10 @@ WORKDIR /app
 RUN corepack enable
 
 # ✿ Copy package.json and yarn files
-COPY package.json ./
-COPY .yarn ./
-COPY .yarnrc.yml ./
-COPY yarn.lock ./
+COPY package.json .
+COPY .yarn .
+COPY .yarnrc.yml .
+COPY yarn.lock .
 
 # ✿ Install dependencies
 RUN yarn config set registry https://registry.yarnpkg.com
