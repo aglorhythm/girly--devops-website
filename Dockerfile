@@ -14,7 +14,7 @@ RUN corepack enable
 COPY package.json ./
 COPY .yarn ./yarn
 COPY .yarnrc.yml ./
-COPY .yarn/releases .yarn/releases
+COPY yarn.lock ./
 
 # ✿ Install dependencies
 RUN yarn config set registry https://registry.yarnpkg.com
