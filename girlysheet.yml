@@ -12,7 +12,7 @@ resources:
     trigger: 
       branches:
         include:
-        - development  # Ensure it triggers on changes to the development branch
+        - development  
 
 trigger:
   branches:
