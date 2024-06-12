@@ -35,7 +35,7 @@ variables:
     value: girlysheet_front_key_pair.pem
 
 stages:
-- stage: 
+- stage: Validate
   dependsOn: dockerBuild
   jobs:
   - job: tofu_validate
