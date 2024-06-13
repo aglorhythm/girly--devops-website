@@ -23,11 +23,6 @@ variables:
   - group: TofuSecrets
   - group: Commands
   - group: Acr
-  - name: ENVIRONMENT
-    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
-      value: preprod
-    ${{ else }}:
-      value: prod
   - name: TF_ROOT
     ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
       value: $(Build.SourcesDirectory)/tofu/preprod
