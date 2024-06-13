@@ -124,6 +124,8 @@
         state: link
         src: '/etc/nginx/sites-available/girlysheet'
         path: '/etc/nginx/sites-enabled/girlysheet'
+      notify:
+        - reload nginx
 
     - name: Remove default config
       ansible.builtin.file:
@@ -139,7 +141,7 @@
       ansible.builtin.command:
         cmd: nginx -t
       register: nginx_test
-      ignore_errors: true
+      ignore_errors: false
 
     - name: Display Nginx test result
       ansible.builtin.debug:
