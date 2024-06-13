@@ -63,6 +63,15 @@ stages:
   - job: tofu_plan
     pool:
         name: Default
+    env:
+        TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
+        TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
+        TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
+        TF_VAR_access_key: $(TF_VAR_access_key)
+        TF_VAR_secret_key: $(TF_VAR_secret_key)
+        TF_VAR_domain_name: $(TF_VAR_domain_name)
+        TF_VAR_ssh_port: $(TF_VAR_ssh_port)
+        TF_VAR_email: $(TF_VAR_email)
     steps:
     - checkout: self
     - script: |
@@ -85,15 +94,6 @@ stages:
         tofu init -input=false -reconfigure
         TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
         ls -lah
-      env:
-        TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
-        TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
-        TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
-        TF_VAR_access_key: $(TF_VAR_access_key)
-        TF_VAR_secret_key: $(TF_VAR_secret_key)
-        TF_VAR_domain_name: $(TF_VAR_domain_name)
-        TF_VAR_ssh_port: $(TF_VAR_ssh_port)
-        TF_VAR_email: $(TF_VAR_email)
       displayName: 'Plan Tofu changes - Root'
       continueOnError: false
 
@@ -218,3 +218,4 @@ stages:
         ACR_USER: $(ACR_USER)
         FRONTEND_URL: $(FRONTEND_URL)
         BACKEND_URL: $(BACKEND_URL)
+ 
