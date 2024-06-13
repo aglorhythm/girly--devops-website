@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name {{ instance_dns_zone }};
+    server_name {{ instance_dns_zone }}  www.{{ instance_dns_zone }};
 
     location / {
         proxy_pass http://localhost:3000;
