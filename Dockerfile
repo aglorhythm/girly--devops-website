@@ -1,25 +1,28 @@
 # Use the official Node.js 22.1.0 image
+#FROM node:bookworm-slim
 FROM node:22.1.0
 
 # ✿ Set working directory
 WORKDIR /app
 
+RUN corepack enable
 
-# Copy package.json and yarn.lock before other files to leverage Docker layer caching
-COPY package.json .
-COPY package-lock.json .
-RUN ls -la
+# ✿ Copy package.json and yarn files
+COPY package*.json .
+COPY .yarnrc.yml .
 
-# Install dependencies
-RUN npm install
+# ✿ Install dependencies et set berry version for yarn
+RUN yarn set version berry
+RUN yarn 
 
-# Copy all files left except ignored files from .dockerignore, then list them
+# ✿ Copy all files left except ignored files from .dockerignore, then list them
 COPY . .
-RUN ls -la
 
-
-# Expose port 3000 for the application
+# ✿ Expose port 3000 for the application
 EXPOSE 3000
 
-# Command to start the app using Yarn
-CMD ["npm", "run", "dev"]
+# ✿ Build app
+RUN yarn build
+
+# ✿ Run app
+CMD ["yarn", "run", "start"]

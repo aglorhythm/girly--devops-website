@@ -35,6 +35,7 @@ html{
 
 body {
   color: rgb(var(--foreground-rgb));
+  cursor: url('/cursor.png'), auto;
   background: linear-gradient(
       to bottom,
       transparent,

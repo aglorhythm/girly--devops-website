@@ -4,11 +4,20 @@
 # The docker image is build and pushed in another azure pipeline. 
 # I cannot add different environments because of budget purpose
 # ===================================
-
 trigger:
   branches:
     include:
-    - main
+    - development
+
+
+resources:
+  pipelines:
+  - pipeline: dockerBuild  
+    source: Build_Docker_Image  
+    trigger: 
+      branches:
+        include:
+        - development  
 
 variables:
   - group: TofuSecrets
@@ -63,6 +72,15 @@ stages:
         tofu init -input=false -reconfigure
         tofu plan -refresh=true -out=tfplan_bucket
         ls -lah
+      env:
+        TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
+        TF_VAR_ovh_application_secret: $(TF_VAR_ovh_application_secret)
+        TF_VAR_ovh_consumer_key: $(TF_VAR_ovh_consumer_key)
+        TF_VAR_access_key: $(TF_VAR_access_key)
+        TF_VAR_secret_key: $(TF_VAR_secret_key)
+        TF_VAR_domain_name: $(TF_VAR_domain_name)
+        TF_VAR_ssh_port: $(TF_VAR_ssh_port)
+        TF_VAR_email: $(TF_VAR_email)
       displayName: 'Plan Tofu changes - Bucket'
       continueOnError: false
 
@@ -143,7 +161,6 @@ stages:
     - publish: $(Build.SourcesDirectory)/ansible/resources
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
-
 
 - stage: Configure
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))

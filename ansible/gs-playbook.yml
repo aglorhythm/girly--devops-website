@@ -85,7 +85,7 @@
     
     - name: Launch the container using Docker Compose
       ansible.builtin.shell:
-        cmd: "docker-compose up -d"
+        cmd: "docker-compose up -d --pull=always"
       args:
         chdir: /home/admin
       environment:
