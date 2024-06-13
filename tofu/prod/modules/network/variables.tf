@@ -3,7 +3,6 @@
 # Description: Here we define our variables.
 # ===================================
 
-
 # Environment
 variable "environment" {
   description = "Environment of deployment"
@@ -18,6 +17,7 @@ variable "cidr_block" {
   default     = "192.168.0.0/16"
 }
 
+# CIDR
 variable "cidr_block_public" {
   description = "Public CIDR"
   type        = string

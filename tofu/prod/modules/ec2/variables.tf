@@ -3,7 +3,6 @@
 # Description: Here we define our variables. They can be used dynamically !
 # ===================================
 
-
 # Environment
 variable "environment" {
   description = "Environment of deployment"
@@ -36,3 +35,4 @@ variable "security_group_ids" {
   type        = list(string) 
   default     = ["sg-084d120ddefefdd83"]
 }
+
