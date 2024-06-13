@@ -73,13 +73,13 @@ resource "tls_private_key" "gs_privkey" {
 
 # ✿ Key pair - Create an AWS Key Pair
 resource "aws_key_pair" "gs_front_keypair" {
-  key_name   = "girlysheet_front_key_pair"
+  key_name   = "girlysheet_front_key_pair_${var.environment}"
   public_key = tls_private_key.gs_privkey.public_key_openssh
 }
 
 # ✿ Secret storage - Create a secret manager resource to store private key
 resource "aws_secretsmanager_secret" "gs_secret_front" {
-  name = "girlysheet_front_privkey"
+  name = "girlysheet_front_privkey_${var.environment}"
   recovery_window_in_days = 0 # imediate deletion
 
   lifecycle {
