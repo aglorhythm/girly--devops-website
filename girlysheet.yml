@@ -44,7 +44,6 @@ stages:
     steps:
     - checkout: self
     - script: |
-        echo "COMMON_VARS value: "$(COMMON_VARS)""
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
@@ -135,11 +134,13 @@ stages:
       displayName: 'Download Tofu plan for the root script'
 
     - script: |
+        echo "COMMON_VARS value: "$(COMMON_VARS)""
+        echo "bucket path value: $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket"
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket -var-file="$(TF_ROOT)/$(COMMON_VARS)"
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket -var-file=$(TF_ROOT)/$(COMMON_VARS)
       displayName: 'Apply Tofu changes - Bucket'
       continueOnError: false
 
@@ -148,7 +149,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root -var-file="$(TF_ROOT)/$(COMMON_VARS)"
+        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root -var-file=$(TF_ROOT)/$(COMMON_VARS)
       displayName: 'Apply Tofu changes - Root'
       continueOnError: false
 
