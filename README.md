@@ -4,7 +4,7 @@ This is the repository of girlysheet.cloud website ! I made it public so you can
 
 But wait ..
 
-The website is ot online yet ! But below you will find the architecture of this project. Until the deployment to production, it might be updated.
+The CDN is not up to date yet ! You can still access the website and, below, you will find the architecture of this project.
 
 ## Architecture 🌼
 
@@ -31,7 +31,7 @@ The website is ot online yet ! But below you will find the architecture of this 
 - **Azure MySQL** : The primary database used by the website, storing all dynamic data and user information securely and efficiently.
 
 
-![Girlysheet Architecture](https://res.cloudinary.com/dhugrtkns/image/upload/v1718036143/girlysheet_architecture_v2_fxnwqh.png)
+![Girlysheet Architecture](https://res.cloudinary.com/dhugrtkns/image/upload/v1718276990/girlysheet_architecture_1_hphmb9.png)
 
 ## Stay Connected 🌹
 
