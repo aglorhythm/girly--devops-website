@@ -7,6 +7,14 @@
 # ===================================
 trigger: none
 
+parameters:
+  - name: environment
+    type: string
+    default: preprod
+    values:
+      - preprod
+      - prod
+
 resources:
   pipelines:
   - pipeline: dockerBuild  
@@ -51,19 +59,11 @@ variables:
     ${{ else }}:
       value: girlysheet_front_privkey_prod
 
-parameters:
-  - name: environment
-    type: string
-    default: preprod
-    values:
-      - preprod
-      - prod
+
 
 stages:
 - stage: Validate
   jobs:
-    environment: 
-      name: ${{ parameters.environment }}
   - job: tofu_validate
     pool:
         name: Default
@@ -89,8 +89,6 @@ stages:
 - stage: Plan
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
-    environment: 
-      name: ${{ parameters.environment }}
   - job: tofu_plan
     pool:
         name: Default
@@ -148,8 +146,6 @@ stages:
 - stage: Apply
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
-    environment: 
-      name: ${{ parameters.environment }}
   - job: tofu_apply
     pool:
         name: Default
@@ -200,8 +196,6 @@ stages:
 - stage: Configure
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
-    environment: 
-      name: ${{ parameters.environment }}
   - job: ansible_configure
     pool:
         name: Default
