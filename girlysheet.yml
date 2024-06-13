@@ -162,7 +162,6 @@ stages:
       artifact: AnsibleResources
       displayName: 'Publish Ansible resources'
 
-
 - stage: Configure
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
