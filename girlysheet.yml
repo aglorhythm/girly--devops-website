@@ -48,13 +48,15 @@ stages:
         pwd
         tofu init -input=false
         tofu validate
+      displayName: 'Validate Tofu deployment - bucket'
+      continueOnError: false
     - script: |
-        cd $(TF_BUCKET)
+        cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
         tofu init -input=false
         tofu validate
-      displayName: 'Validate Tofu deployment'
+      displayName: 'Validate Tofu deployment - root'
       continueOnError: false
 
 - stage: Plan
@@ -70,7 +72,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu plan -refresh=true -out=tfplan_bucket
+        tofu plan -refresh=true -out=tfplan_bucket -var-file=$(COMMON_VARS)
         ls -lah
       env:
         TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
@@ -92,7 +94,7 @@ stages:
         echo "Using OVH Application Secret: ${TF_VAR_ovh_application_secret:0:4}****"
         echo "Using OVH Consumer Key: ${TF_VAR_ovh_consumer_key:0:4}****"
         tofu init -input=false -reconfigure
-        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
+        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root -var-file=$(COMMON_VARS)
         ls -lah
       env:
         TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
@@ -135,7 +137,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket -var-file=$(COMMON_VARS)
       displayName: 'Apply Tofu changes - Bucket'
       continueOnError: false
 
@@ -144,7 +146,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root
+        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root -var-file=$(COMMON_VARS)
       displayName: 'Apply Tofu changes - Root'
       continueOnError: false
 
