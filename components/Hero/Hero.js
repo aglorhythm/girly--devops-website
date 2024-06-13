@@ -51,6 +51,8 @@ const Hero = React.memo(({ }) => {
                 autoPlay
                 muted
                 loop
+                playsinline
+                id="bg-video"
                 className={`bg-video absolute top-0 left-0 z-5 max-h-full min-h-full min-w-full object-cover md:object-cover md:h-full`}
             />
         </div>
