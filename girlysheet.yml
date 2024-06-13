@@ -5,7 +5,10 @@
 # I cannot add different environments because of budget purpose - 
 # I use the preprod as prod simply for demonstration
 # ===================================
-trigger: development
+trigger: 
+  branches:
+    include:
+    - development
 
 resources:
   pipelines:
