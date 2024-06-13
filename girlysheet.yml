@@ -21,7 +21,7 @@ variables:
   - group: TofuSecrets
   - group: Commands
   - group: Acr
-   - name: ENVIRONMENT
+  - name: ENVIRONMENT
     ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
       value: preprod
     ${{ else }}:
