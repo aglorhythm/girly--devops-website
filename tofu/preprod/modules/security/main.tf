@@ -6,12 +6,12 @@
 
 # ✿ Create group "girlysheet_front_sg"
 resource "aws_security_group" "girlysheet_front_sg" {
-  name        = var.sg
+  name        = "${var.sg}_${var.environment}"
   description = "Security group for girlysheet"
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = "sg-${var.sg}"
+    Name = "sg-${var.sg}-${var.environment}"
   }
 }
 

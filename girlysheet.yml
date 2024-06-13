@@ -33,7 +33,10 @@ variables:
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
   - name: KEY_NAME
-    value: girlysheet_front_key_pair.pem
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: girlysheet_front_key_pair_preprod.pem
+    ${{ else }}:
+      value: girlysheet_front_key_pair_prod.pem
 
 stages:
 - stage: Validate
