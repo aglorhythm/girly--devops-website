@@ -115,6 +115,8 @@ resource "ovh_domain_zone_record" "sub_girlysheet" {
   target     = module.ec2.instance_girlysheet_ip
 }
 
+
+
 # ===================================
 # Ansible variables
 # ===================================

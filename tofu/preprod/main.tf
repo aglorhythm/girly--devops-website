@@ -100,13 +100,31 @@ module "ec2" {
 # ===================================
 
 
-resource "ovh_domain_zone_record" "sub_girlysheet" {
+resource "ovh_domain_zone_record" "girlysheet" {
   zone       = var.domain_name
+  subdomain  = ""
   fieldtype  = "A"
-  subdomain  = "${environment}"
   ttl        = 3600
   target     = module.ec2.instance_girlysheet_ip
 }
+
+resource "ovh_domain_zone_record" "sub_girlysheet" {
+  zone       = var.domain_name
+  fieldtype  = "A"
+  subdomain  = "www"
+  ttl        = 3600
+  target     = module.ec2.instance_girlysheet_ip
+}
+
+
+# ✿ ! Useful for two environments - example below would set up "preprod.domain.cloud"
+#resource "ovh_domain_zone_record" "sub_girlysheet" {
+#  zone       = var.domain_name
+#  fieldtype  = "A"
+#  subdomain  = "${environment}"
+#  ttl        = 3600
+#  target     = module.ec2.instance_girlysheet_ip
+#}
 
 # ===================================
 # Ansible variables

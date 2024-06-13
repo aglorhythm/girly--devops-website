@@ -2,7 +2,8 @@
 # Author: @aglorhythm / girlysheet.cloud ✿
 # Description: This script is retrieved by azure pipelines.
 # The docker image is build and pushed in another azure pipeline. 
-# I cannot add different environments because of budget purpose
+# I cannot add different environments because of budget purpose - 
+# I use the preprod as prod simply for demonstration
 # ===================================
 resources:
   pipelines:
