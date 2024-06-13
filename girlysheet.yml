@@ -54,11 +54,11 @@ variables:
 stages:
 - stage: Validate
   jobs:
+    environment: 
+      name: $(ENVIRONMENT)
   - job: tofu_validate
     pool:
         name: Default
-    environment: 
-      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - script: |
@@ -81,11 +81,11 @@ stages:
 - stage: Plan
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
+    environment: 
+      name: $(ENVIRONMENT)
   - job: tofu_plan
     pool:
         name: Default
-    environment: 
-      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - script: |
@@ -140,11 +140,11 @@ stages:
 - stage: Apply
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
+    environment: 
+      name: $(ENVIRONMENT)
   - job: tofu_apply
     pool:
         name: Default
-    environment: 
-      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - download: current
@@ -192,11 +192,11 @@ stages:
 - stage: Configure
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
+    environment: 
+      name: $(ENVIRONMENT)
   - job: ansible_configure
     pool:
         name: Default
-    environment: 
-      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - download: current
