@@ -59,8 +59,6 @@ variables:
     ${{ else }}:
       value: girlysheet_front_privkey_prod
 
-
-
 stages:
 - stage: Validate
   jobs:
