@@ -34,11 +34,11 @@ variables:
   - name: KEY_NAME
     value: girlysheet_front_key_pair.pem
   - name: COMMON_VARS
-    value: $(COMMON_VARS)
+    value: "$(COMMON_VARS)"
   - name: BACKEND_URL
-    value: $(BACKEND_URL)
+    value: "$(BACKEND_URL)"
   - name: FRONTEND_URL
-    value: $(FRONTEND_URL)
+    value: "$(FRONTEND_URL)"
 
 stages:
 - stage: Validate
@@ -49,6 +49,7 @@ stages:
     steps:
     - checkout: self
     - script: |
+        echo "COMMON_VARS value: $(COMMON_VARS)"
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
