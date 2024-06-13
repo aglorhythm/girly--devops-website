@@ -20,12 +20,12 @@ variables:
   - name: TF_ROOT
     ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
       value: $(Build.SourcesDirectory)/tofu/preprod
-    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}: 
+    ${{ else }}:
       value: $(Build.SourcesDirectory)/tofu/prod
   - name: TF_BUCKET
     ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
       value: $(Build.SourcesDirectory)/tofu/preprod/scripts
-    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}: 
+    ${{ else }}:
       value: $(Build.SourcesDirectory)/tofu/prod/script
   - name: ANS_ROOT
     value: $(Build.SourcesDirectory)/ansible
