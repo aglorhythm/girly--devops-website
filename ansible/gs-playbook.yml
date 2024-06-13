@@ -51,6 +51,7 @@
     - name: Display Docker version
       ansible.builtin.debug:
         msg: "The Docker version installed is: {{ docker_version_output.stdout }}"
+      
     
     - name: Download Docker-compose
       ansible.builtin.get_url: 
@@ -143,6 +144,7 @@
     - name: Display Nginx test result
       ansible.builtin.debug:
         msg: "{{ nginx_test.stdout }}"
+      when: nginx_test.failed
 
     - name: Install Certbot and its Nginx plugin
       ansible.builtin.apt:
