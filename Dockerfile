@@ -11,7 +11,7 @@ RUN corepack enable
 COPY package*.json .
 COPY .yarnrc.yml .
 
-# ✿ Install dependencies
+# ✿ Install dependencies et set berry version for yarn
 RUN yarn set version berry
 RUN yarn 
 
