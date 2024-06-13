@@ -43,12 +43,12 @@ stages:
     steps:
     - checkout: self
     - script: |
-        echo "COMMON_VARS value: $(COMMON_VARS)"
+        echo "COMMON_VARS value: "$(COMMON_VARS)""
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
         tofu init -input=false
-        tofu validate -var-file="$(COMMON_VARS)"
+        tofu validate
       displayName: 'Validate Tofu deployment - bucket'
       continueOnError: false
     - script: |
@@ -56,7 +56,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false
-        tofu validate -var-file="$(COMMON_VARS)"
+        tofu validate 
       displayName: 'Validate Tofu deployment - root'
       continueOnError: false
 
