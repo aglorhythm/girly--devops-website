@@ -47,7 +47,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false
-        tofu validate
+        tofu validate -var-file=$(COMMON_VARS)
       displayName: 'Validate Tofu deployment - bucket'
       continueOnError: false
     - script: |
@@ -55,7 +55,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false
-        tofu validate
+        tofu validate -var-file=$(COMMON_VARS)
       displayName: 'Validate Tofu deployment - root'
       continueOnError: false
 
