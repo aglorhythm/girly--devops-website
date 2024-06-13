@@ -5,6 +5,8 @@
 # I cannot add different environments because of budget purpose - 
 # I use the preprod as prod simply for demonstration
 # ===================================
+trigger: none
+
 resources:
   pipelines:
   - pipeline: dockerBuild  
@@ -12,12 +14,18 @@ resources:
     trigger: 
       branches:
         include:
-        - development  
+        - development
+        # - main  # For production 
 
 variables:
   - group: TofuSecrets
   - group: Commands
   - group: Acr
+   - name: ENVIRONMENT
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: preprod
+    ${{ else }}:
+      value: prod
   - name: TF_ROOT
     ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
       value: $(Build.SourcesDirectory)/tofu/preprod
@@ -37,6 +45,11 @@ variables:
       value: girlysheet_front_key_pair_preprod.pem
     ${{ else }}:
       value: girlysheet_front_key_pair_prod.pem
+  - name: KEY_SECRET
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: girlysheet_front_privkey_preprod
+    ${{ else }}:
+      value: girlysheet_front_privkey_prod
 
 stages:
 - stage: Validate
@@ -44,6 +57,8 @@ stages:
   - job: tofu_validate
     pool:
         name: Default
+    environment: 
+      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - script: |
@@ -69,6 +84,8 @@ stages:
   - job: tofu_plan
     pool:
         name: Default
+    environment: 
+      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - script: |
@@ -126,6 +143,8 @@ stages:
   - job: tofu_apply
     pool:
         name: Default
+    environment: 
+      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - download: current
@@ -176,6 +195,8 @@ stages:
   - job: ansible_configure
     pool:
         name: Default
+    environment: 
+      name: $(ENVIRONMENT)
     steps:
     - checkout: self
     - download: current
@@ -204,7 +225,7 @@ stages:
         ls -la
         mkdir key
         cd key
-        aws secretsmanager get-secret-value --secret-id girlysheet_front_privkey --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
+        aws secretsmanager get-secret-value --secret-id $(KEY_SECRET) --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
         echo "Retrieved key:" 
         ls -la
       displayName: 'Get key for GS Server'
