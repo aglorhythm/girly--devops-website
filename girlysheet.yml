@@ -27,7 +27,7 @@ variables:
     ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
       value: $(Build.SourcesDirectory)/tofu/preprod/scripts
     ${{ else }}:
-      value: $(Build.SourcesDirectory)/tofu/prod/script
+      value: $(Build.SourcesDirectory)/tofu/prod/scripts
   - name: ANS_ROOT
     value: $(Build.SourcesDirectory)/ansible
   - name: ANS_INVENTORY
@@ -74,7 +74,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu plan -refresh=true -out=tfplan_bucket -var-file="$(COMMON_VARS)"
+        tofu plan -refresh=true -out=tfplan_bucket -var-file="$(TF_ROOT)/$(COMMON_VARS)"
         ls -lah
       env:
         TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
@@ -96,7 +96,7 @@ stages:
         echo "Using OVH Application Secret: ${TF_VAR_ovh_application_secret:0:4}****"
         echo "Using OVH Consumer Key: ${TF_VAR_ovh_consumer_key:0:4}****"
         tofu init -input=false -reconfigure
-        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root -var-file="$(COMMON_VARS)"
+        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root -var-file="$(TF_ROOT)/$(COMMON_VARS)"
         ls -lah
       env:
         TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
@@ -139,7 +139,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket -var-file="$(COMMON_VARS)"
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket -var-file="$(TF_ROOT)/$(COMMON_VARS)"
       displayName: 'Apply Tofu changes - Bucket'
       continueOnError: false
 
@@ -148,7 +148,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root -var-file="$(COMMON_VARS)"
+        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root -var-file="$(TF_ROOT)/$(COMMON_VARS)"
       displayName: 'Apply Tofu changes - Root'
       continueOnError: false
 
