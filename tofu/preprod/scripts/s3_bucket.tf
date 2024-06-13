@@ -9,7 +9,7 @@ provider "aws" {
 # Ressources ---------------------------------------------
 
 data "aws_s3_bucket" "existing" {
-  count  = var.backend_bucket == "tfstate-front-girlysheet" ? 1 : 0 
+  count  = var.backend_bucket == "tfstate-front-girlysheet-preprod" ? 1 : 0 
   bucket = var.backend_bucket
 }
 
