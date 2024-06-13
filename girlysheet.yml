@@ -5,15 +5,7 @@
 # I cannot add different environments because of budget purpose - 
 # I use the preprod as prod simply for demonstration
 # ===================================
-trigger: none
-
-parameters:
-  - name: environment
-    type: string
-    default: preprod
-    values:
-      - preprod
-      - prod
+trigger: development
 
 resources:
   pipelines:
@@ -23,7 +15,6 @@ resources:
       branches:
         include:
         - development
-        # - main  # For production 
 
 variables:
   - group: TofuSecrets
