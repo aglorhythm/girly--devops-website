@@ -3,6 +3,13 @@
 # Description: Here we define our variables.
 # ===================================
 
+# Environment
+variable "environment" {
+  description = "Environment of deployment"
+  type        = string
+  default     = "preprod"
+}
+
 # The CIDR block for the VPC
 variable "cidr_block" {
   description = "The CIDR block for the subnets"
@@ -10,6 +17,7 @@ variable "cidr_block" {
   default     = "192.168.0.0/16"
 }
 
+# CIDR
 variable "cidr_block_public" {
   description = "Public CIDR"
   type        = string

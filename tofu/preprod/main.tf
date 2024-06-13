@@ -23,9 +23,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket                  = "tfstate-front-girlysheet"
-    key                     = "state/terraform.tfstate"
-    region                  = "eu-west-3"
+    bucket   = "tfstate-front-girlysheet-preprod"
+    key      = "state/terraform.tfstate"
+    region   = "eu-west-3"
   }
 }
 
@@ -54,7 +54,6 @@ module "vpc" {
   cidr_block = var.cidr_block_vpc
 }
 
-
 # ===================================
 # ✿ Security layers
 # ===================================
@@ -65,7 +64,6 @@ module "security" {
   ssh_port = var.ssh_port
   //ssh_access_cidr = "0.0.0.0/0"
 }
-
 
 # ===================================
 # ✿ EC2 instance creation
@@ -101,6 +99,7 @@ module "ec2" {
 # ✿ DNS
 # ===================================
 
+
 resource "ovh_domain_zone_record" "girlysheet" {
   zone       = var.domain_name
   subdomain  = ""
@@ -117,13 +116,23 @@ resource "ovh_domain_zone_record" "sub_girlysheet" {
   target     = module.ec2.instance_girlysheet_ip
 }
 
+
+# ✿ ! Useful for two environments - example below would set up "preprod.domain.cloud"
+#resource "ovh_domain_zone_record" "sub_girlysheet" {
+#  zone       = var.domain_name
+#  fieldtype  = "A"
+#  subdomain  = "${environment}"
+#  ttl        = 3600
+#  target     = module.ec2.instance_girlysheet_ip
+#}
+
 # ===================================
 # Ansible variables
 # ===================================
 
 # Generate Ansible variables file in the group_vars folder
 resource "local_file" "girlysheet_vars" {
-  filename = "../ansible/resources/group_vars/girlysheet.yml"
+  filename = "${var.ansible_folder}/group_vars/girlysheet.yml"
   content = <<-EOF
     ansible_user: admin
     ansible_ssh_private_key_file:  ./${module.security.instance_key}
@@ -141,5 +150,5 @@ resource "local_file" "hosts" {
   [girlysheet]
   ${module.ec2.instance_girlysheet_ip}
   EOF
-  filename = "../ansible/resources/hosts"
+  filename = "${var.ansible_folder}/hosts"
 }

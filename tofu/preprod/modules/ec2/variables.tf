@@ -3,6 +3,14 @@
 # Description: Here we define our variables. They can be used dynamically !
 # ===================================
 
+
+# Environment
+variable "environment" {
+  description = "Environment of deployment"
+  type        = string
+  default     = "preprod"
+}
+
 variable "instance_details" {
   description = "A list of maps containing details for each instance to be created."
   type = list(object({

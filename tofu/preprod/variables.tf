@@ -1,9 +1,13 @@
+# Environment
 variable "environment" {
-  description = "The domain name to manage"
+  description = "Environment of deployment"
   type        = string
-  default     = "prod"
 }
 
+variable "ansible_folder" {
+  description = "Ansible folder"
+  type        = string
+}
 
 variable "cidr_block_rt" {
   description = "The CIDR block for the route table"

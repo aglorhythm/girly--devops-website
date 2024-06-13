@@ -51,6 +51,7 @@
     - name: Display Docker version
       ansible.builtin.debug:
         msg: "The Docker version installed is: {{ docker_version_output.stdout }}"
+      
     
     - name: Download Docker-compose
       ansible.builtin.get_url: 
@@ -123,6 +124,8 @@
         state: link
         src: '/etc/nginx/sites-available/girlysheet'
         path: '/etc/nginx/sites-enabled/girlysheet'
+      notify:
+        - reload nginx
 
     - name: Remove default config
       ansible.builtin.file:
@@ -138,11 +141,12 @@
       ansible.builtin.command:
         cmd: nginx -t
       register: nginx_test
-      ignore_errors: true
+      ignore_errors: false
 
     - name: Display Nginx test result
       ansible.builtin.debug:
         msg: "{{ nginx_test.stdout }}"
+      when: nginx_test.failed
 
     - name: Install Certbot and its Nginx plugin
       ansible.builtin.apt:
@@ -158,7 +162,7 @@
     
     - name: Get SSL certificate using Certbot
       ansible.builtin.command: >
-        certbot --nginx -d {{ instance_dns_zone }} --non-interactive --agree-tos --email {{ certbot_email }}
+        certbot --nginx -d {{ instance_dns_zone }} -d www.{{ instance_dns_zone }} --non-interactive --agree-tos --email {{ certbot_email }}
       args:
         creates: /etc/letsencrypt/live/{{ instance_dns_zone }}/fullchain.pem
       notify:

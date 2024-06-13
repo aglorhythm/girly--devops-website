@@ -3,6 +3,14 @@
 # Description: Here we define our variables. They can be used dynamically !
 # ===================================
 
+
+# Environment
+variable "environment" {
+  description = "Environment of deployment"
+  type        = string
+  default     = "preprod"
+}
+
 # VPC ID where the security group will be created
 variable "vpc_id" {
   type        = string

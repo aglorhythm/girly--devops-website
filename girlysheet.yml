@@ -2,13 +2,13 @@
 # Author: @aglorhythm / girlysheet.cloud ✿
 # Description: This script is retrieved by azure pipelines.
 # The docker image is build and pushed in another azure pipeline. 
-# I cannot add different environments because of budget purpose
+# I cannot add different environments because of budget purpose - 
+# I use the preprod as prod simply for demonstration
 # ===================================
-trigger:
+trigger: 
   branches:
     include:
     - development
-
 
 resources:
   pipelines:
@@ -17,22 +17,36 @@ resources:
     trigger: 
       branches:
         include:
-        - development  
+        - development
 
 variables:
   - group: TofuSecrets
   - group: Commands
   - group: Acr
   - name: TF_ROOT
-    value: $(Build.SourcesDirectory)/tofu
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: $(Build.SourcesDirectory)/tofu/preprod
+    ${{ else }}:
+      value: $(Build.SourcesDirectory)/tofu/prod
   - name: TF_BUCKET
-    value: $(Build.SourcesDirectory)/tofu/scripts
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: $(Build.SourcesDirectory)/tofu/preprod/scripts
+    ${{ else }}:
+      value: $(Build.SourcesDirectory)/tofu/prod/scripts
   - name: ANS_ROOT
     value: $(Build.SourcesDirectory)/ansible
   - name: ANS_INVENTORY
     value: $(Build.SourcesDirectory)/ansible/resources
   - name: KEY_NAME
-    value: girlysheet_front_key_pair.pem
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: girlysheet_front_key_pair_preprod.pem
+    ${{ else }}:
+      value: girlysheet_front_key_pair_prod.pem
+  - name: KEY_SECRET
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: girlysheet_front_privkey_preprod
+    ${{ else }}:
+      value: girlysheet_front_privkey_prod
 
 stages:
 - stage: Validate
@@ -48,13 +62,15 @@ stages:
         pwd
         tofu init -input=false
         tofu validate
+      displayName: 'Validate Tofu deployment - bucket'
+      continueOnError: false
     - script: |
-        cd $(TF_BUCKET)
+        cd $(TF_ROOT)
         echo "Changed directory:" 
         pwd
         tofu init -input=false
-        tofu validate
-      displayName: 'Validate Tofu deployment'
+        tofu validate 
+      displayName: 'Validate Tofu deployment - root'
       continueOnError: false
 
 - stage: Plan
@@ -70,7 +86,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu plan -refresh=true -out=tfplan_bucket
+        tofu plan -refresh=true -out=tfplan_bucket -var-file="$(TF_ROOT)/$(COMMON_VARS)"
         ls -lah
       env:
         TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
@@ -92,7 +108,7 @@ stages:
         echo "Using OVH Application Secret: ${TF_VAR_ovh_application_secret:0:4}****"
         echo "Using OVH Consumer Key: ${TF_VAR_ovh_consumer_key:0:4}****"
         tofu init -input=false -reconfigure
-        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root
+        TF_LOG=DEBUG tofu plan -refresh=true -out=tfplan_root -var-file="$(TF_ROOT)/$(COMMON_VARS)"
         ls -lah
       env:
         TF_VAR_ovh_application_key: $(TF_VAR_ovh_application_key)
@@ -131,11 +147,13 @@ stages:
       displayName: 'Download Tofu plan for the root script'
 
     - script: |
+        echo "COMMON_VARS value: "$(COMMON_VARS)""
+        echo "bucket path value: $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket"
         cd $(TF_BUCKET)
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket 
       displayName: 'Apply Tofu changes - Bucket'
       continueOnError: false
 
@@ -196,7 +214,7 @@ stages:
         ls -la
         mkdir key
         cd key
-        aws secretsmanager get-secret-value --secret-id girlysheet_front_privkey --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
+        aws secretsmanager get-secret-value --secret-id $(KEY_SECRET) --region eu-west-3 --query SecretString --output text > $(KEY_NAME)
         echo "Retrieved key:" 
         ls -la
       displayName: 'Get key for GS Server'
