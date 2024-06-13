@@ -51,11 +51,19 @@ variables:
     ${{ else }}:
       value: girlysheet_front_privkey_prod
 
+parameters:
+  - name: environment
+    type: string
+    default: preprod
+    values:
+      - preprod
+      - prod
+
 stages:
 - stage: Validate
   jobs:
     environment: 
-      name: $(ENVIRONMENT)
+      name: ${{ parameters.environment }}
   - job: tofu_validate
     pool:
         name: Default
@@ -82,7 +90,7 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
     environment: 
-      name: $(ENVIRONMENT)
+      name: ${{ parameters.environment }}
   - job: tofu_plan
     pool:
         name: Default
@@ -141,7 +149,7 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
     environment: 
-      name: $(ENVIRONMENT)
+      name: ${{ parameters.environment }}
   - job: tofu_apply
     pool:
         name: Default
@@ -193,7 +201,7 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
   jobs:
     environment: 
-      name: $(ENVIRONMENT)
+      name: ${{ parameters.environment }}
   - job: ansible_configure
     pool:
         name: Default
