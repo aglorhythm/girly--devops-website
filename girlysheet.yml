@@ -140,7 +140,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket -var-file=$(TF_ROOT)/$(COMMON_VARS)
+        tofu apply $(Pipeline.Workspace)/TofuPlanBucket/tfplan_bucket 
       displayName: 'Apply Tofu changes - Bucket'
       continueOnError: false
 
@@ -149,7 +149,7 @@ stages:
         echo "Changed directory:" 
         pwd
         tofu init -input=false -reconfigure
-        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root -var-file=$(TF_ROOT)/$(COMMON_VARS)
+        tofu apply $(Pipeline.Workspace)/TofuPlanRoot/tfplan_root
       displayName: 'Apply Tofu changes - Root'
       continueOnError: false
 
