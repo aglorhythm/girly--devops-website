@@ -1,12 +1,8 @@
 server {
     listen 80;
-    listen 443 ssl;
 
     server_name {{ instance_dns_zone }};
 
-    ssl_certificate /etc/letsencrypt/live/{{ instance_dns_zone }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ instance_dns_zone }}/privkey.pem;
-  
     location / {
         proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
