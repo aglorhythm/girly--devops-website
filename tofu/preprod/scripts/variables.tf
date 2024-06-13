@@ -1,7 +1,6 @@
 variable "backend_bucket" {
   description = "The name of the S3 bucket to be created"
   type        = string
-  default     = "tfstate-front-girlysheet"
 }
 
 # AWS Access variables  ------- >
