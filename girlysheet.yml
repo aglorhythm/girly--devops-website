@@ -4,12 +4,6 @@
 # The docker image is build and pushed in another azure pipeline. 
 # I cannot add different environments because of budget purpose
 # ===================================
-trigger:
-  branches:
-    include:
-    - development
-
-
 resources:
   pipelines:
   - pipeline: dockerBuild  
@@ -24,9 +18,15 @@ variables:
   - group: Commands
   - group: Acr
   - name: TF_ROOT
-    value: $(Build.SourcesDirectory)/tofu
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: $(Build.SourcesDirectory)/tofu/preprod
+    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}: 
+      value: $(Build.SourcesDirectory)/tofu/prod
   - name: TF_BUCKET
-    value: $(Build.SourcesDirectory)/tofu/scripts
+    ${{ if eq( variables['Build.SourceBranchName'], 'development' ) }}: 
+      value: $(Build.SourcesDirectory)/tofu/preprod/scripts
+    ${{ if ne( variables['Build.SourceBranchName'], 'main' ) }}: 
+      value: $(Build.SourcesDirectory)/tofu/prod/script
   - name: ANS_ROOT
     value: $(Build.SourcesDirectory)/ansible
   - name: ANS_INVENTORY
