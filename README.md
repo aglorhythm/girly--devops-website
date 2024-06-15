@@ -29,7 +29,7 @@ The CDN is not up to date yet ! You can still access the website and, below, you
 
 ### Database
 
-- **Azure MySQL** : The primary database used by the website, storing all dynamic data and user information securely and efficiently.
+- **OVH MySQL** : The primary database used by the website, storing all dynamic data and user information securely and efficiently.
 
 
 ![Girlysheet Architecture](https://res.cloudinary.com/dhugrtkns/image/upload/v1718276990/girlysheet_architecture_1_hphmb9.png)
