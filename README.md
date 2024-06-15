@@ -21,10 +21,11 @@ The CDN is not up to date yet ! You can still access the website and, below, you
 
 ### DevOps
 
-- **Azure** :
+- **Github** :
     - **Repos**: Manages source code using Azure Repos, offering secure version control.
+- **Azure** :
     - **Pipelines**: Automates builds and deployments using Azure Pipelines, ensuring smooth and continuous integration and deployment processes.
-    - **Container Registry**: Hosts Docker container image of the frontend that is used in deployments, supporting consistent and reproducible builds.
+    - **Container Registry**: Hosts Docker container image of the frontend that is used in deployments (EC2), supporting consistent and reproducible builds.
 
 ### Database
 
@@ -35,7 +36,7 @@ The CDN is not up to date yet ! You can still access the website and, below, you
 
 ## Stay Connected 🌹
 
-Connect with me on [LinkedIn](https://www.linkedin.com/in/your-linkedin-profile) to stay updated on my latest projects and adventures in the world of DevOps.
+Connect with me on [LinkedIn](https://www.linkedin.com/in/oaman) to stay updated on my latest projects and adventures in the world of DevOps.
 
 
 ---
